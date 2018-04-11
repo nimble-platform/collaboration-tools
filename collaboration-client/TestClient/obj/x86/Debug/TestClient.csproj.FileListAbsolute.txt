@@ -1,0 +1,8 @@
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\TestClient\obj\x86\Debug\TestClient.csprojResolveAssemblyReference.cache
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\TestClient\bin\Debug\TestClient.exe.config
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\TestClient\bin\Debug\TestClient.exe
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\TestClient\bin\Debug\TestClient.pdb
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\TestClient\bin\Debug\NimbleCollaborationClient.dll
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\TestClient\bin\Debug\NimbleCollaborationClient.pdb
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\TestClient\obj\x86\Debug\TestClient.exe
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\TestClient\obj\x86\Debug\TestClient.pdb

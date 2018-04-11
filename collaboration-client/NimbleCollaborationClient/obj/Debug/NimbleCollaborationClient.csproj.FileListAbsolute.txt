@@ -1,0 +1,4 @@
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\NimbleCollaborationClient\bin\Debug\NimbleCollaborationClient.pdb
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\NimbleCollaborationClient\obj\Debug\NimbleCollaborationClient.pdb
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\NimbleCollaborationClient\bin\Debug\NimbleCollaborationClient.dll
+C:\Users\ggariddi\sviluppo\net\VISAGE\VISAGE\Tools\NimbleCollaborationClient\NimbleCollaborationClient\obj\Debug\NimbleCollaborationClient.dll
