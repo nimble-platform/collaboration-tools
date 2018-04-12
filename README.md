@@ -37,5 +37,6 @@ public static string baseURL = "http://localhost:8081/collaboration-service";
 ### Local 
 Include the dll in the dependencies of a project. 
 
- ---
+
+----
 The project leading to this application has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 723810.
