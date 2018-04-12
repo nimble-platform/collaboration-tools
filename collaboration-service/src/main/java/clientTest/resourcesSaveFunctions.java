@@ -42,7 +42,7 @@ public class resourcesSaveFunctions {
 			
 			String projectName = null;
 			
-			String idToken = Functions.login("ggariddi@dobi.it", "genius73");
+			String idToken = Functions.login("username", "password");
 			if (idToken!=null) {
 				
 				//Open projects list
