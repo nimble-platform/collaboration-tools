@@ -14,7 +14,7 @@ public class initFunctions {
 			String projectName = null;
 			String inviteID = null;
 			
-			String idToken = Functions.login("ggariddi@dobi.it", "genius73");
+			String idToken = Functions.login("username", "password");
 			if (idToken!=null) {
 				
 				//Open projects list
@@ -53,7 +53,7 @@ public class initFunctions {
 					
 			}
 			
-			String idTokenCustomer = Functions.login("ssalvetti@dobi.it", "sNimble80");
+			String idTokenCustomer = Functions.login("username", "password");
 			if (idTokenCustomer!=null) {
 				
 				Boolean find = false;
