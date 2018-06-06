@@ -47,7 +47,7 @@ public class resourcesReadHistory {
 			System.gc();
 			*/
 			
-			String projectName = null;
+			String projectName = null; 
 			
 			String idToken = Functions.login("username", "password");
 			if (idToken!=null) {

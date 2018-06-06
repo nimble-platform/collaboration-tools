@@ -41,7 +41,7 @@ public class resourcesDelete {
 			outputStream.write(resSX.getResource().getBytes());
 			outputStream.close();
 			outputStream = null;
-			System.gc();
+			System.gc(); 
 			*/
 			
 			String projectName = null;
