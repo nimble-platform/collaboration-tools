@@ -29,7 +29,7 @@ public class resourcesSaveFunctions {
 			byte[] data2 = IOUtils.toByteArray(dest);
 			res2.setResource(new BytesType(data2));
 			
-			String txtValue = res2.toString();
+			String txtValue = res 2.toString();
 			
 			ResourceType resSX = ResourceType.mapJson(txtValue);			
 			File  imgPathOut = new File("C:\\Users\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_out.png");

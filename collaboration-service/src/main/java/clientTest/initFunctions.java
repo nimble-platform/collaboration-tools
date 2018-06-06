@@ -53,7 +53,7 @@ public class initFunctions {
 					
 			}
 			
-			String idTokenCustomer = Functions.login("username2", "password2");
+			String idTokenCustomer = Functions.login("username", "password");
 			if (idTokenCustomer!=null) {
 				
 				Boolean find = false;

@@ -12,7 +12,7 @@ public class resourcesDelete {
 	public static void main(String[] args) {
 		try {
 			
-			/*
+			/* 
 
 			ResourceListType testToString = new ResourceListType("TOKEN", "PROJECT_NAME","TEST");
 			System.out.println(testToString.toString()); 
