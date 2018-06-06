@@ -20,6 +20,7 @@ public class ResourceListType extends JsonType {
    	private String type;
    	private Long version;
    	private String user;
+   	private String notes;
    	private List<ResourceListType> children;
 	
    	public ResourceListType() {}
@@ -29,7 +30,17 @@ public class ResourceListType extends JsonType {
    		this.token = "";
    		this.projectName = parent.getProjectName();
    		if (parent.getName()!=null) {
-   			this.name = parent.getName() + ResourceType.RESOURCE_SEPARATOR + name;
+   			if (!parent.getName().equals("")) {
+   				if (name==null) {
+   					this.name = parent.getName();
+   				}
+   				else {
+   					this.name = parent.getName() + ResourceType.RESOURCE_SEPARATOR + name;
+   				}
+   			}
+   			else {
+   	   			this.name = name;
+   			}
    		}
    		else {
    			this.name = name;
@@ -79,7 +90,15 @@ public class ResourceListType extends JsonType {
     public void setUser(String user) {
     	this.user = user;
     }
+    
+    public String getNotes(){
+    	return this.notes;
+    }
 
+    public void setNotes(String notes){
+    	this.notes = notes;
+    }
+    
     public List<ResourceListType> getChildren() {
     	if (this.children==null) {
     		this.children = new Vector<ResourceListType>();

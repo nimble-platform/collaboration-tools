@@ -20,7 +20,7 @@ public class resourcesSaveFunctions {
 			
 			/*
 			ResourceType res2 = new ResourceType("PPE", "IMG_ART333");
-			File imgPath2 = new File("C:\\Users\\ggariddi\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1.png");
+			File imgPath2 = new File("C:\\Users\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1.png");
 
 			InputStream source = new FileInputStream(imgPath2);
 			InputStream dest = IOUtils.toBufferedInputStream(source);
@@ -32,7 +32,7 @@ public class resourcesSaveFunctions {
 			String txtValue = res2.toString();
 			
 			ResourceType resSX = ResourceType.mapJson(txtValue);			
-			File  imgPathOut = new File("C:\\Users\\ggariddi\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_out.png");
+			File  imgPathOut = new File("C:\\Users\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_out.png");
 			OutputStream outputStream = new FileOutputStream(imgPathOut);
 			outputStream.write(resSX.getResource().getBytes());
 			outputStream.close();
@@ -42,7 +42,7 @@ public class resourcesSaveFunctions {
 			
 			String projectName = null;
 			
-			String idToken = Functions.login("ggariddi@dobi.it", "genius73");
+			String idToken = Functions.login("username", "password");
 			if (idToken!=null) {
 				
 				//Open projects list
@@ -69,18 +69,27 @@ public class resourcesSaveFunctions {
 			if (idToken == null) return; 
 			if (projectName == null) return;
 
-			ResourceType res = new ResourceType(projectName, "IMG_ART333", "png");
-			File imgPath = new File("C:\\Users\\ggariddi\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_50_4.png");
+			ResourceType res = new ResourceType(projectName, "IMG_ART333", ResourceType.RESOURCE_TYPE, "png");
+			File imgPath = new File("C:\\Users\\CAD_IMAGE\\CAD_IMAGE\\1869_50_4.png");
 			InputStream source = new FileInputStream(imgPath);
 			InputStream dest = IOUtils.toBufferedInputStream(source);
 			source.close();
 			source = null;
 			byte[] data2 = IOUtils.toByteArray(dest);
 			res.setResource(new BytesType(data2));
-			
-			SaveResourceType resToSave = new SaveResourceType(idToken);
-			resToSave.getResources().add(res);
-			
+			SaveResourceType resToSave = new SaveResourceType(idToken,res);
+			System.out.println(resToSave);
+			Functions.saveResources(resToSave);
+
+			res = new ResourceType(projectName, "IMG_ART333", ResourceType.RESOURCE_TYPE, "png");
+			imgPath = new File("C:\\Users\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1917_37_1.png");
+			source = new FileInputStream(imgPath);
+			dest = IOUtils.toBufferedInputStream(source);
+			source.close();
+			source = null;
+			data2 = IOUtils.toByteArray(dest);
+			res.setResource(new BytesType(data2));
+			resToSave = new SaveResourceType(idToken,res);
 			System.out.println(resToSave);
 			
 			Functions.saveResources(resToSave);

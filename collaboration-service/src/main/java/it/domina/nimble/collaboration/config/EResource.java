@@ -1,5 +1,9 @@
 package it.domina.nimble.collaboration.config;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
+
 import it.domina.lib.store.ConditionType;
 import it.domina.lib.store.Row;
 import it.domina.lib.store.exception.RecordNotFound;
@@ -17,6 +21,10 @@ public class EResource extends AbstractStorable {
 	public static final String TYPE = "TYPE";
 	public static final String VERSION = "VERSION";
 	public static final String USER = "USER";
+	public static final String NOTES = "NOTES";
+	public static final String LASTUPDATE = "LASTUPDATE";
+	
+	private EResource _parentToSave = null;
 	
 	private EResource(){
 		super("resources", "res_id", ServiceConfig.getInstance().getStore());
@@ -82,8 +90,17 @@ public class EResource extends AbstractStorable {
 		return super.data.getField("res_lastver").getLongValue();
 	}
 	
-	public void setVersion(Integer ver){
+	public void setVersion(Long ver){
 		super.data.getField("res_lastver").setValue(ver);
+		this._parentToSave = getParent();
+		if (this._parentToSave!=null) {
+			if (this._parentToSave.getVersion()<ver) {
+				this._parentToSave.setVersion(ver);
+			}
+			else {
+				this._parentToSave = null;
+			}
+		}
 	}
 	
 	public String getUser() {
@@ -92,6 +109,56 @@ public class EResource extends AbstractStorable {
 	
 	public void setUser(String user){
 		super.data.getField("res_user").setValue(user);
+	}
+	
+	public String getNotes() {
+		return super.data.getField("res_notes").getStringValue();
+	}
+	
+	public void setNotes(String note){
+		super.data.getField("res_notes").setValue(note);
+	}
+	
+	public Date getLastDate() {
+		return super.data.getField("res_lastUpdate").getDateValue();
+	}
+	
+	public List<EResourceLog> getResourcesHistory() throws Exception {
+		List<EResourceLog> result = new Vector<EResourceLog>();
+		VResourcesLog lstRes = new VResourcesLog(this);
+		for (int i = 0; i < lstRes.getSize(); i++) {
+			result.add(lstRes.getResourceLog(i));
+		}
+		return result;
+	}
+	
+	public void removeVersionLog(Integer ver) {
+		try {
+			VResourcesLog lstRes = new VResourcesLog(this);
+			lstRes.addWhere(EResourceLog.VERSION, ConditionType.EQUAL, ver);
+			if (lstRes.getSize()>0) {
+				EResourceLog log = lstRes.getResourceLog(0);
+				log.remove();
+			}
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	@Override
+	public Boolean save() throws Exception {
+		if (this._parentToSave!=null) {
+			if (!this._parentToSave.save()) {
+				return false;
+			}
+			this._parentToSave = null;
+		}
+		super.data.getField("res_lastUpdate").setValue(new Date());
+		if (super.save()) {
+			EResourceLog log = new EResourceLog(this);
+			return log.save();
+		}
+		return false; 
 	}
 	
 	private EResource getParentResourceByKey(String resourceKey) {
@@ -114,5 +181,6 @@ public class EResource extends AbstractStorable {
 		}
 		return null;
 	}
+	
 	
 }

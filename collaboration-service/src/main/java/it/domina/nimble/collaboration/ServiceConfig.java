@@ -119,11 +119,9 @@ public class ServiceConfig {
 
 	public boolean saveResource(SaveResourceType params, Session sess) throws Exception {
 		EPartner prt = this.config.getPartner(sess);
-		for (ResourceType res : params.getResources()) {
-			Connector conn = this.activeCollaborations.get(res.getProjectName());
-			if (conn!=null) {
-				return conn.saveResource(res, prt);
-			}
+		Connector conn = this.activeCollaborations.get(params.getResource().getProjectName());
+		if (conn!=null) {
+			return conn.saveResource(params.getResource(), prt);
 		}
 		return false;
 	}
@@ -139,12 +137,33 @@ public class ServiceConfig {
 		}
 	}
 
+	public ResourceListType readResourceHistory(ResourceListType params, Session sess) throws Exception {
+		EPartner prt = this.config.getPartner(sess);
+		Connector conn = this.activeCollaborations.get(params.getProjectName());
+		if (conn!=null) {
+			return conn.readResourceHistory(prt, params);
+		}
+		else{
+			throw new SubscriptionRequired();
+		}
+	}
 	
 	public ResourceType readResource(ReadResourceType params, Session sess) throws Exception {
 		EPartner prt = this.config.getPartner(sess);
 		Connector conn = this.activeCollaborations.get(params.getProjectName());
 		if (conn!=null) {
 			return conn.readResource(params, prt);
+		}
+		else {
+			throw new SubscriptionRequired();
+		}
+	}
+	
+	public ResourceType deleteResource(ReadResourceType params, Session sess) throws Exception {
+		EPartner prt = this.config.getPartner(sess);
+		Connector conn = this.activeCollaborations.get(params.getProjectName());
+		if (conn!=null) {
+			return conn.deleteResource(params, prt);
 		}
 		else {
 			throw new SubscriptionRequired();

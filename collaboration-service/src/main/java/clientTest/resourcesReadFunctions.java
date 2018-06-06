@@ -27,7 +27,7 @@ public class resourcesReadFunctions {
 			System.out.println(testToString.toString());
 			
 			ResourceType res2 = new ResourceType("PPE", "IMG_ART333");
-			File imgPath2 = new File("C:\\Users\\ggariddi\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1.png");
+			File imgPath2 = new File("C:\\Users\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1.png");
 
 			InputStream source = new FileInputStream(imgPath2);
 			InputStream dest = IOUtils.toBufferedInputStream(source);
@@ -39,7 +39,7 @@ public class resourcesReadFunctions {
 			String txtValue = res2.toString();
 			
 			ResourceType resSX = ResourceType.mapJson(txtValue);			
-			File  imgPathOut = new File("C:\\Users\\ggariddi\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_out.png");
+			File  imgPathOut = new File("C:\\Users\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_out.png");
 			OutputStream outputStream = new FileOutputStream(imgPathOut);
 			outputStream.write(resSX.getResource().getBytes());
 			outputStream.close();
@@ -49,7 +49,7 @@ public class resourcesReadFunctions {
 			
 			String projectName = null;
 			
-			String idToken = Functions.login("ggariddi@dobi.it", "genius73");
+			String idToken = Functions.login("username", "password");
 			if (idToken!=null) {
 				
 				//Open projects list
@@ -81,8 +81,8 @@ public class resourcesReadFunctions {
 			ResourceListType lstRes = Functions.getResourceList(idToken, projectName);
 			for (ResourceListType res : lstRes.getChildren()) {
 				if (res.getName().equals("IMG_ART333")) {
-					ResourceType risorsa = Functions.getResources(idToken, projectName, res.getName());
-					File  imgPathOut = new File("C:\\Users\\ggariddi\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_"+risorsa.getVersion().toString()+".png");
+					ResourceType risorsa = Functions.getResource(idToken, projectName, res.getName());
+					File  imgPathOut = new File("C:\\Users\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_"+risorsa.getVersion().toString()+".png");
 					OutputStream outputStream = new FileOutputStream(imgPathOut);
 					outputStream.write(risorsa.getResource().getBytes());
 					outputStream.close();
@@ -90,8 +90,8 @@ public class resourcesReadFunctions {
 					System.gc();
 					
 
-					risorsa = Functions.getResources(idToken, projectName, res.getName(), 1);
-					imgPathOut = new File("C:\\Users\\ggariddi\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_"+risorsa.getVersion().toString()+".png");
+					risorsa = Functions.getResource(idToken, projectName, res.getName(), 2);
+					imgPathOut = new File("C:\\Users\\Pictures\\CAD_IMAGE\\CAD_IMAGE\\1869_42_1_"+risorsa.getVersion().toString()+".png");
 					outputStream = new FileOutputStream(imgPathOut);
 					outputStream.write(risorsa.getResource().getBytes());
 					outputStream.close();

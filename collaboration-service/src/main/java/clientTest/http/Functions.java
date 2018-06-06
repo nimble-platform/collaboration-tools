@@ -234,11 +234,28 @@ public class Functions {
         return null;
     }
 
-    public static ResourceType getResources(String token, String project, String resourceName) {
-    	return getResources(token, project, resourceName, null);
+    public static ResourceListType getResourceHistory(String tokenId, String projectName, String resourceName) throws Exception {
+        CloseableHttpResponse response = null;
+        ResourceListType params = new ResourceListType(tokenId, projectName, resourceName);
+        response = sendPostCommand("/resourceHistory", params.toString());
+        String strData = logAndGetResponse(response);
+        if (response.getStatusLine().getStatusCode()==200) {
+            return ResourceListType.mapJson(strData);
+        }
+        else {
+        	if (strData.equals(SubscriptionRequired.ERRCODE)) {
+        		throw new SubscriptionRequired();
+        	}
+        }
+    	closeResponse(response);
+        return null;
+    }
+
+    public static ResourceType getResource(String token, String project, String resourceName) {
+    	return getResource(token, project, resourceName, null);
     }
     
-    public static ResourceType getResources(String token, String project, String resourceName, Integer ver) {
+    public static ResourceType getResource(String token, String project, String resourceName, Integer ver) {
         CloseableHttpResponse response = null;
         try {
         	ReadResourceType params = new ReadResourceType(token, project, resourceName, ver);
@@ -263,6 +280,36 @@ public class Functions {
         return null;
     }
     
+    public static ResourceType deleteResource(String token, String project, String resourceName) {
+    	return deleteResource(token, project, resourceName, null);
+    }
+
+    public static ResourceType deleteResource(String token, String project, String resourceName, Integer ver) {
+        CloseableHttpResponse response = null;
+        try {
+        	ReadResourceType params = new ReadResourceType(token, project, resourceName, ver);
+            response = sendPostCommand("/deleteResource", params.toString());
+            String strData = logAndGetResponse(response);
+            if (response.getStatusLine().getStatusCode()==200) {
+            	ResourceType res = ResourceType.mapJson(strData);
+                return res;
+            }
+            else {
+            	if (strData.equals(SubscriptionRequired.ERRCODE)) {
+            		throw new SubscriptionRequired();
+            	}
+            }
+        	closeResponse(response);
+            
+        } catch (Exception ex){
+            logger.log(Level.ERROR, ex);
+        } finally {
+        	closeResponse(response);
+        }
+        return null;
+    }
+    
+
     private static CloseableHttpResponse sendPostCommand(String url, String content, Header... headers) {
         CloseableHttpResponse response = null;
 
@@ -304,14 +351,5 @@ public class Functions {
         return null;
     }
 
-    /*
-    private static String getKeyFromJsonString(String key, String jsonString) {
-        JsonObject obj = (JsonObject) new JsonParser().parse(jsonString);
-        if (obj != null) {
-            return obj.get(key).getAsString();
-        }
-        throw new RuntimeException(String.format("Missing key '%s' in json string '%s'", key, jsonString));
-    }
-    */
 
 }

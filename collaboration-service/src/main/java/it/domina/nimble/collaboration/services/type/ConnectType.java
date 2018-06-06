@@ -16,15 +16,6 @@ public class ConnectType extends JsonType {
     
 	protected ConnectType() {}
 	
-	/*
-	public InviteType(EProject prj) {
-		this.id = prj.getID().toString();
-    	this.name = prj.getName();
-    	this.owner = prj.getOwner().getUserId();
-    	this.token = "";
-    }
-	*/
-	
 	public ConnectType(String token, String inviteID) {
     	this.token = token;
     	this.inviteID = inviteID;

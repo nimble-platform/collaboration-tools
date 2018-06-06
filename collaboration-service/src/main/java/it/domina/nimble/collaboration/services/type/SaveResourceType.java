@@ -1,8 +1,5 @@
 package it.domina.nimble.collaboration.services.type;
 
-import java.util.List;
-import java.util.Vector;
-
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -15,7 +12,7 @@ public class SaveResourceType extends JsonType {
     private static final Logger logger = Logger.getLogger(SaveResourceType.class);
 
    	private String token;
-   	private List<ResourceType> resources = new Vector<ResourceType>();  
+   	private ResourceType resource;  
 	
     public SaveResourceType() { }
     
@@ -25,17 +22,15 @@ public class SaveResourceType extends JsonType {
 
     public SaveResourceType(String token, ResourceType res) { 
     	this.token = token;
-    	if (res!=null) {
-    		this.resources.add(res);
-    	}
+    	this.resource = res;
     }
 
     public String getToken() {
     	return this.token;
     }
 
-    public List<ResourceType> getResources(){
-    	return this.resources;
+    public ResourceType getResource(){
+    	return this.resource;
     }
 
     public static SaveResourceType mapJson(String json) {

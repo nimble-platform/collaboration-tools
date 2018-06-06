@@ -2,6 +2,7 @@ package it.domina.nimble.collaboration.services.type;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Date;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -25,8 +26,11 @@ public class ResourceType extends JsonType {
    	private String name;
    	private String type;
    	private String ext;
-   	private Integer version;
+   	private String user;
+   	private Long version;
    	private BytesType resource;
+   	private String notes;
+   	private Date lastUpdate; 
    	
    	public ResourceType() {}
    	
@@ -63,11 +67,19 @@ public class ResourceType extends JsonType {
     	return this.ext;
     }
 
-    public Integer getVersion() {
+    public String getUser() {
+    	return this.user;
+    }
+
+    public void setUser(String u) {
+    	this.user = u;
+    }
+
+    public Long getVersion() {
     	return this.version;
     }
 
-    public void setVersion(Integer ver) {
+    public void setVersion(Long ver) {
     	this.version = ver;
     }
 
@@ -79,6 +91,22 @@ public class ResourceType extends JsonType {
     	this.resource = res;
     }
 
+    public String getNotes(){
+    	return this.notes;
+    }
+
+    public void setLastUpdate(Date dt){
+    	this.lastUpdate = dt;
+    }
+
+    public Date getLastUpdate(){
+    	return this.lastUpdate;
+    }
+
+    public void setNotes(String notes){
+    	this.notes = notes;
+    }
+    
     @JsonIgnore
     public InputStream getStream(){
     	return new ByteArrayInputStream(this.resource.getBytes());

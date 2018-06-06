@@ -20,6 +20,8 @@ public class VResources extends AbstractVistaStore {
 		addColumn(EResource.PARENT, "res_idres");
 		addColumn(EResource.VERSION, "res_lastver");
 		addColumn(EResource.USER, "res_user");
+		addColumn(EResource.NOTES, "res_notes");
+		addColumn(EResource.LASTUPDATE, "res_lastUpdate");
 		this.project = prj;
 		clearWhere();
 	}

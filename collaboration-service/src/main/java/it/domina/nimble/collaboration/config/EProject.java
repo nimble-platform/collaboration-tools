@@ -65,13 +65,14 @@ public class EProject extends AbstractStorable {
 		VResources lstRes = new VResources(this);
 		lstRes.addWhere(EResource.KEY, ConditionType.EQUAL, res.getKey());
 		if (lstRes.getSize()>0) {
-			result = lstRes.getResource(0);
+			result = lstRes.getResource(0);	
 		}
 		else {
-			result = new EResource(this, res.getKey(), res.getType(), res.getName());
+			result = new EResource(this, res.getKey(), res.getType(), res.getName());	
 		}
 		result.setUser(user);
 		result.setVersion(res.getVersion());
+		result.setNotes(res.getNotes());
 		result.save();
 		return result;
 	}

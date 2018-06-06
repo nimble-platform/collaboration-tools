@@ -18,6 +18,7 @@ import it.domina.nimble.collaboration.ServiceConfig;
 import it.domina.nimble.collaboration.config.EPartner;
 import it.domina.nimble.collaboration.config.EProject;
 import it.domina.nimble.collaboration.config.EResource;
+import it.domina.nimble.collaboration.config.EResourceLog;
 import it.domina.nimble.collaboration.exceptions.PermissionDenied;
 import it.domina.nimble.collaboration.exceptions.ResourceNotFound;
 import it.domina.nimble.collaboration.kafka.KafkaCfg;
@@ -79,13 +80,13 @@ public class Connector {
 			DBFilesFolder resFolder = searchFolder(res.getKey(), true);
 			if (res.getType().equals(ResourceType.RESOURCE_TYPE)) {
 				Integer lastVersionNumber = getLastVersionNumeber(resFolder); 
-				res.setVersion(lastVersionNumber+1);
+				res.setVersion(Long.valueOf(lastVersionNumber+1));
 				String resMeta = "VER"+String.format("%07d", lastVersionNumber+1);
 				InputStream stream = new ByteArrayInputStream(res.toString().getBytes(StandardCharsets.UTF_8));
 				resFolder.addFile(stream,resMeta+".json");
 			}
 			else {
-				res.setVersion(1);
+				res.setVersion(Long.valueOf(1));
 			}
 			this.project.saveResource(res, prt.getUsername());
 			return true;
@@ -93,26 +94,6 @@ public class Connector {
 		else {
 			throw new PermissionDenied();
 		}
-	}
-	
-	private DBFilesFolder searchFolder(String path, Boolean create)  {
-		DBFilesFolder currentFolder = this.resourcesFolder;
-		String[] names = path.split(ResourceType.RESOURCE_SEPARATOR); 
-		for (String name : names) {
-			try 
-			{
-				currentFolder = currentFolder.getFolder(name);
-			}
-			catch (Exception e) {
-				if (create) {
-					currentFolder = currentFolder.newFolder(name);
-				}
-				else {
-					return null;
-				}
-			}
-		}
-		return currentFolder;
 	}
 	
 	public ResourceListType readResourceList(EPartner prt, ResourceListType resReference) throws Exception {
@@ -130,6 +111,7 @@ public class Connector {
 				ResourceListType newRes = new ResourceListType(resReference, r.getName(), r.getType());
 				newRes.setUser(r.getUser());
 				newRes.setVersion(r.getVersion());
+				newRes.setNotes(r.getNotes());
 				resReference.getChildren().add(newRes);
 			}
 			return resReference;
@@ -139,6 +121,70 @@ public class Connector {
 		}
 	}
 
+	public ResourceListType readResourceHistory(EPartner prt, ResourceListType resReference) throws Exception {
+		EndPoint ep = this.activePartners.get(prt.getUserId());
+		if (ep!=null) {
+			if (resReference.getName() != null) {
+				EResource r = this.project.getResourceDescription(resReference.getName());
+				List<EResourceLog> lstRes = r.getResourcesHistory();
+				for (EResourceLog rlog : lstRes) {
+					ResourceListType newRes = new ResourceListType(resReference, null, resReference.getType());
+					newRes.setUser(rlog.getUser());
+					newRes.setVersion(rlog.getVersion());
+					newRes.setNotes(rlog.getNotes());
+					resReference.getChildren().add(newRes);
+				}
+			}
+			return resReference;
+		}
+		else {
+			throw new PermissionDenied();
+		}
+	}
+	
+	public ResourceType deleteResource(ReadResourceType params, EPartner prt) throws Exception {
+		EndPoint ep = this.activePartners.get(prt.getUserId());
+		if (ep!=null) {
+			DBFilesFolder resFolder = searchFolder(params.getResourceName(), false);
+			if (resFolder!=null) {
+				ResourceType result = null;
+				Integer lastVersionNumber;
+				if (params.getResourceVersion()==null) {
+					lastVersionNumber = getLastVersionNumeber(resFolder);	
+				}
+				else {
+					lastVersionNumber = params.getResourceVersion();
+				}
+				DBFilesFile fileJson = resFolder.getFile("VER"+String.format("%07d", lastVersionNumber)+".json");
+				if (fileJson!=null) {
+					String json = IOUtils.toString(fileJson.getData(), StandardCharsets.UTF_8); 
+					result = ResourceType.mapJson(json);
+				}
+				if (params.getResourceVersion()==null) {
+					resFolder.removeAllFiles();
+					resFolder.delete();
+					EResource r = this.project.getResourceDescription(params.getResourceName());
+					if (r!=null) {
+						r.remove();
+					}
+				}
+				else {
+					fileJson.delete();
+					EResource r = this.project.getResourceDescription(params.getResourceName());
+					if (r!=null) {
+						r.removeVersionLog(lastVersionNumber);
+					}
+				}
+				return result;
+			}
+			else {
+				throw new ResourceNotFound();
+			}
+		}
+		else {
+			throw new PermissionDenied();
+		}
+	}
 	
 	public ResourceType readResource(ReadResourceType params, EPartner prt) throws Exception {
 		EndPoint ep = this.activePartners.get(prt.getUserId());
@@ -175,6 +221,26 @@ public class Connector {
 		for (EndPoint ep : this.activePartners.values()) {
 			ep.close();
 		}
+	}
+	
+	private DBFilesFolder searchFolder(String path, Boolean create)  {
+		DBFilesFolder currentFolder = this.resourcesFolder;
+		String[] names = path.split(ResourceType.RESOURCE_SEPARATOR); 
+		for (String name : names) {
+			try 
+			{
+				currentFolder = currentFolder.getFolder(name);
+			}
+			catch (Exception e) {
+				if (create) {
+					currentFolder = currentFolder.newFolder(name);
+				}
+				else {
+					return null;
+				}
+			}
+		}
+		return currentFolder;
 	}
 	
 	private Boolean checkKafkaTopic() throws Exception {
