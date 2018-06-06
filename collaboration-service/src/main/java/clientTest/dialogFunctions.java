@@ -15,7 +15,8 @@ public class dialogFunctions {
 			
 			String projectName = null;
 			
-			String idToken = Functions.login(" username", "password");
+			String idToken = Functions.login("username", "password");
+
 			if (idToken!=null) {
 				
 				//Open projects list
