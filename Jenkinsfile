@@ -5,8 +5,8 @@ node ('nimble-jenkins-slave') {
 
     stage ('Build docker image') {
         sh 'cd collaboration-service'
-        sh 'mvn clean install'
-        sh 'docker build -t nimbleplatform/collaboration-service:${BUILD_NUMBER} .'
+        sh 'cd collaboration-service ; mvn clean install'
+        sh 'cd collaboration-service ; docker build -t nimbleplatform/collaboration-service:${BUILD_NUMBER} .'
     }
 
     stage ('Push docker image') {
@@ -16,9 +16,9 @@ node ('nimble-jenkins-slave') {
     }
 
     stage ('Deploy') {
-        sh ''' sed -i 's/IMAGE_TAG/'"$BUILD_NUMBER"'/g' kubernetes/deploy.yaml '''
-        sh 'kubectl apply -f kubernetes/deploy.yaml -n prod --validate=false'
-        sh 'kubectl apply -f kubernetes/svc.yaml    -n prod --validate=false'
+        sh ''' sed -i 's/IMAGE_TAG/'"$BUILD_NUMBER"'/g' collaboration-service/kubernetes/deploy.yaml '''
+        sh 'kubectl apply -f collaboration-service/kubernetes/deploy.yaml -n prod --validate=false'
+        sh 'kubectl apply -f collaboration-service/kubernetes/svc.yaml    -n prod --validate=false'
     }
     
     stage ('Print-deploy logs') {
