@@ -4,9 +4,8 @@ node ('nimble-jenkins-slave') {
     }
 
     stage ('Build docker image') {
-        sh 'cd collaboration-service'
         sh 'cd collaboration-service ; mvn clean install'
-        sh 'cd collaboration-service ; docker build -t nimbleplatform/collaboration-service:${BUILD_NUMBER} .'
+        sh 'docker build -f collaboration-service/Dockerfile -t nimbleplatform/collaboration-service:${BUILD_NUMBER}'
     }
 
     stage ('Push docker image') {
