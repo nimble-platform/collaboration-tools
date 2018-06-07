@@ -1,80 +1,73 @@
-/**
- * Copyright 2015-2016 IBM
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- */
-/**
- * Licensed Materials - Property of IBM
- * (c) Copyright IBM Corp. 2015-2016
- */
 package it.domina.nimble.collaboration.kafka.bluemix;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
+/**
+ * Created by evgeniyh on 2/19/18.
+ */
+
 public class MessageHubCredentials {
+    private final String user;
+    private final String password;
 
-    private String apiKey, kafkaRestUrl, user, password;
-    private String[] kafkaBrokersSasl;
+    @SerializedName("mqlight_lookup_url")
+    private final String lookupUrl;
 
-    @JsonProperty("api_key")
+    @SerializedName("instance_id")
+    private final String instanceId;
+
+    @SerializedName("api_key")
+    private final String apiKey;
+
+    @SerializedName("kafka_admin_url")
+    private final String adminUrl;
+
+    @SerializedName("kafka_brokers_sasl")
+    private final String[] brokers;
+
+    @SerializedName("kafka_rest_url")
+    private final String restUrl;
+
+    public MessageHubCredentials(String instanceId, String lookupUrl, String apiKey, String adminUrl, String restUrl, String user, String password, String[] brokers) {
+        this.instanceId = instanceId;
+        this.lookupUrl = lookupUrl;
+        this.apiKey = apiKey;
+        this.adminUrl = adminUrl;
+        this.restUrl = restUrl;
+        this.user = user;
+        this.password = password;
+        this.brokers = brokers;
+    }
+
+    public String getInstanceId() {
+        return instanceId;
+    }
+
+    public String getLookupUrl() {
+        return lookupUrl;
+    }
+
     public String getApiKey() {
         return apiKey;
     }
 
-    @JsonProperty("api_key")
-    public void setLabel(String apiKey) {
-        this.apiKey = apiKey;
-    }
-    
-    @JsonProperty("kafka_rest_url")
-    public String getKafkaRestUrl() {
-        return kafkaRestUrl;
+    public String getAdminUrl() {
+        return adminUrl;
     }
 
-    @JsonProperty("kafka_rest_url")
-    public void setKafkaRestUrl(String kafkaRestUrl) {
-        this.kafkaRestUrl = kafkaRestUrl;
-    }
-    
-    @JsonProperty
     public String getUser() {
         return user;
     }
 
-    @JsonProperty
-    public void setUser(String user) {
-        this.user = user;
-    }
-    
-    @JsonProperty
     public String getPassword() {
         return password;
     }
 
-    @JsonProperty
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    
-    @JsonProperty("kafka_brokers_sasl")
-    public String[] getKafkaBrokersSasl() {
-        return kafkaBrokersSasl;
+    public String[] getBrokers() {
+        return brokers;
     }
 
-    @JsonProperty("kafka_brokers_sasl")
-    public void setKafkaBrokersSasl(String[] kafkaBrokersSasl) {
-        this.kafkaBrokersSasl = kafkaBrokersSasl;
+    public String getRestUrl() {
+        return restUrl;
     }
 }
