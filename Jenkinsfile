@@ -1,6 +1,6 @@
 node ('nimble-jenkins-slave') {
     stage('Download Latest') {
-        git(url: 'https://github.com/nimble-platform/collaboration-tools.git', branch: 'master')
+        git(url: 'https://github.com/nimble-platform/collaboration-tools.git', branch: 'k8s-integration')
     }
 
     stage ('Build docker image') {
