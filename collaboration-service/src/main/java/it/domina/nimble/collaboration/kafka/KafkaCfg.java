@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
+import com.google.gson.Gson;
+
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.common.PartitionInfo;
@@ -44,7 +46,7 @@ public class KafkaCfg {
 
     //KAFKA PARAMS
     private String 		resourceDir;
-    private String 		bootstrapServers = null;
+    private String[] 		bootstrapServers = null;
     private String 		adminRestURL = null;
     private String 		apiKey = null;
     private String 		user = null;
@@ -61,28 +63,33 @@ public class KafkaCfg {
 	        // Check environment: Bluemix vs Local, to obtain configuration parameters
 	        if (this.isRunningInBluemix) {
 	
-	            logger.log(Level.INFO, "Running in Bluemix mode.");
-	            this.resourceDir = this.userDir + File.separator + APP_NAME + File.separator + "bin" + File.separator + "resources";
+	            // logger.log(Level.INFO, "Running in Bluemix mode.");
+	            // this.resourceDir = this.userDir + File.separator + APP_NAME + File.separator + "bin" + File.separator + "resources";
 	
-	            MessageHubCredentials credentials = BluemixEnvironment.getMessageHubCredentials();
+	            // MessageHubCredentials credentials = BluemixEnvironment.getMessageHubCredentials();
 	            
-	            this.bootstrapServers = stringArrayToCSV(credentials.getKafkaBrokersSasl());
-	            this.adminRestURL = credentials.getKafkaRestUrl();
-	            this.apiKey = credentials.getApiKey();
-	            this.user = credentials.getUser();
-	            this.password = credentials.getPassword();
+	            // this.bootstrapServers = stringArrayToCSV(credentials.getKafkaBrokersSasl());
+	            // this.adminRestURL = credentials.getKafkaRestUrl();
+	            // this.apiKey = credentials.getApiKey();
+	            // this.user = credentials.getUser();
+	            // this.password = credentials.getPassword();
 	
 	        } else {
 	            // If running locally, parse the command line
 	            logger.log(Level.INFO, "Running in local mode.");
-	            this.resourceDir = this.userDir;
-	            loadClientConfiguration(applicationProperties, "kafka.properties");
-	            
-	            this.bootstrapServers = applicationProperties.getProperty("kafka_brokers_sasl");
-	            this.adminRestURL = applicationProperties.getProperty("kafka_admin_url");
-	            this.apiKey = applicationProperties.getProperty("kafka.api_key");
-	            this.user = apiKey.substring(0, 16);
-	            this.password = apiKey.substring(16);
+                this.resourceDir = this.userDir;
+
+                // TODO: Stop using credentials from files
+	            // loadClientConfiguration(applicationProperties, "kafka.properties");
+                
+                String credentialsString = System.getenv("MESSAGE_HUB_CREDENTIALS");
+                MessageHubCredentials credentials = (new Gson()).fromJson(credentialsString, MessageHubCredentials.class);
+                
+	            this.bootstrapServers = credentials.getBrokers();
+	            this.adminRestURL = credentials.getAdminUrl();
+	            this.apiKey = credentials.getApiKey();
+	            this.user = credentials.getUser();
+	            this.password = credentials.getPassword();
 	        	
 	        }
 
