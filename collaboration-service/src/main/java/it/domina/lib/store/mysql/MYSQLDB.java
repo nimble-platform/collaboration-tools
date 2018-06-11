@@ -14,6 +14,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -90,9 +94,12 @@ public class MYSQLDB implements Store {
 	
 	public MYSQLDB(String userdir) {
 		try {
-			String propfile = userdir + File.separator + "mysqldb.properties";
-			Properties prop = loadConfiguration(propfile);
-			this.pool = new MYSQLConnectionPool(prop.getProperty("conn"), prop.getProperty("user"), prop.getProperty("pwd"));
+			JsonObject credentials = (new JsonParser()).parse(System.getenv("MYSQL_CREDENTIALS")).getAsJsonObject();
+			String conn = credentials.get("conn").getAsString();
+			String user = credentials.get("user").getAsString();
+			String password = credentials.get("password").getAsString();
+			
+			this.pool = new MYSQLConnectionPool(conn, user, password);
 		} catch (Exception e) {
 			logger.log(Level.ERROR, e);
 		}
