@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -98,7 +97,7 @@ public class MYSQLDB implements Store {
 			String conn = credentials.get("conn").getAsString();
 			String user = credentials.get("user").getAsString();
 			String password = credentials.get("password").getAsString();
-			
+
 			this.pool = new MYSQLConnectionPool(conn, user, password);
 		} catch (Exception e) {
 			logger.log(Level.ERROR, e);
