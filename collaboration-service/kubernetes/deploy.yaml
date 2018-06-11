@@ -20,6 +20,10 @@ spec:
       labels:
         app: collaboration-service
     spec:
+      volumes:
+      - name: clb-volume
+        persistentVolumeClaim:
+          claimName: pv-clb
       containers:
       - image: nimbleplatform/collaboration-service:IMAGE_TAG
         imagePullPolicy: Always
@@ -30,6 +34,11 @@ spec:
             secretKeyRef:
               name: messagehub-credentials
               key: credentials.json
+        - name: MYSQL_CREDENTIALS
+          valueFrom:
+            secretKeyRef:
+              name: mysql-credentials
+              key: credentials.json
         ports:
         - containerPort: 8080
           name: http
@@ -38,3 +47,8 @@ spec:
           requests:
             cpu: 200m
             memory: 256Mi
+        volumeMounts:
+        - mountPath: /home/clb
+          name: clb-volume
+          workingDir: /home/clb
+
