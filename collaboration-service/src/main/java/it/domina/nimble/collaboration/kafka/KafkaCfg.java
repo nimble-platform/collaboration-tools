@@ -46,7 +46,7 @@ public class KafkaCfg {
 
     //KAFKA PARAMS
     private String 		resourceDir;
-    private String[] 		bootstrapServers = null;
+    private String 		bootstrapServers = null;
     private String 		adminRestURL = null;
     private String 		apiKey = null;
     private String 		user = null;
@@ -85,7 +85,7 @@ public class KafkaCfg {
                 String credentialsString = System.getenv("MESSAGE_HUB_CREDENTIALS");
                 MessageHubCredentials credentials = (new Gson()).fromJson(credentialsString, MessageHubCredentials.class);
                 
-	            this.bootstrapServers = credentials.getBrokers();
+	            this.bootstrapServers = String.join(",",credentials.getBrokers());
 	            this.adminRestURL = credentials.getAdminUrl();
 	            this.apiKey = credentials.getApiKey();
 	            this.user = credentials.getUser();
