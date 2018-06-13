@@ -12,8 +12,6 @@ import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import com.mysql.jdbc.Statement;
-
 import it.domina.lib.store.Field;
 import it.domina.lib.store.FieldAction;
 import it.domina.lib.store.FieldType;
