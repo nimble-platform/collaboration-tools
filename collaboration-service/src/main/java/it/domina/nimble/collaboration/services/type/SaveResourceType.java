@@ -35,7 +35,6 @@ public class SaveResourceType extends JsonType {
 
     public static SaveResourceType mapJson(String json) {
 		try {
-			logger.info("Trying to read - " + SaveResourceType.class + " from json string -  " + json);
         	ObjectMapper mapper = new ObjectMapper();
 			return mapper.readValue(json, SaveResourceType.class);
 		} catch (Exception e) {
