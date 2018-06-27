@@ -36,6 +36,8 @@ public class Functions {
 	
 	private static String BASE_URL = "http://localhost:8081/collaboration-service";
 	
+	//private static String BASE_URL = "https://nimble-platform.uk-south.containers.mybluemix.net/collaborations";
+		
     private static final Logger logger = Logger.getLogger(Functions.class);
 
     public static String login(String name, String pwd) {

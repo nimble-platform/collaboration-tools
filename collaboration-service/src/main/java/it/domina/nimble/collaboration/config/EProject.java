@@ -15,6 +15,7 @@ public class EProject extends AbstractStorable {
 	public static final String ID = "ID";
 	public static final String NAME = "NAME";
 	public static final String OWNER = "OWNER";
+	public static final String STATUS = "STATUS";
 	
 	private EProject(){
 		super("projects", "prj_id", ServiceConfig.getInstance().getStore());
@@ -50,6 +51,14 @@ public class EProject extends AbstractStorable {
 		} catch (RecordNotFound e) {
 			return null;
 		}
+	}
+
+	public ProjectStatus getStatus() {
+		return ProjectStatus.valueOfSigla(super.data.getField("prj_status").getStringValue());
+	}
+	
+	public void setStatus(ProjectStatus value){
+		super.data.getField("prj_status").setValue(value.toString());
 	}
 
 	public String getKafkaTopic() {
