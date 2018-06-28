@@ -24,8 +24,8 @@ import it.domina.nimble.collaboration.core.Session;
 
 public class Authentication {
 
-	//private static String BASE_URL = "https://nimble-platform.salzburgresearch.at/nimble/identity";
-	private static String BASE_URL = "http://nimble-staging.salzburgresearch.at/identity";
+	private static String BASE_URL = "https://nimble-platform.salzburgresearch.at/nimble/identity";
+	//private static String BASE_URL = "http://nimble-staging.salzburgresearch.at/identity";
 	
 	private static final Logger logger = Logger.getLogger(Authentication.class);
 	
