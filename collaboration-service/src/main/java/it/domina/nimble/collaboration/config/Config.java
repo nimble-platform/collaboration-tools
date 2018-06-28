@@ -52,7 +52,7 @@ public class Config {
 	public EProject newProject(ProjectType param, Session sess) throws Exception {
 		EPartner prt = getPartner(sess);
 		if (prt!=null) {
-			VProjects lst = new VProjects();
+			VProjects lst = new VProjects(false);
 			lst.addWhere(EProject.NAME, ConditionType.EQUAL, param.getName());
 			lst.addWhere(EProject.OWNER, ConditionType.EQUAL, prt.getID());
 			if (lst.getSize()==0) {
@@ -71,10 +71,30 @@ public class Config {
 		}
 	}
 	
+	public void archiveProject(ProjectType param, Session sess) throws Exception {
+		EPartner prt = getPartner(sess);
+		if (prt!=null) {
+			VProjects lst = new VProjects(true);
+			lst.addWhere(EProject.NAME, ConditionType.EQUAL, param.getName());
+			lst.addWhere(EProject.OWNER, ConditionType.EQUAL, prt.getID());
+			if (lst.getSize()>0) {
+				EProject prj = lst.getProject(0);
+				prj.setStatus(ProjectStatus.ARCHIVED);
+				prj.save();
+			}
+			else {
+				throw new ProjectNotFound();	
+			}
+		}
+		else {
+			throw new SubscriptionRequired();	
+		}
+	}
+
 	public String sendInvite(InviteType params, Session sess)  throws Exception {
 		EPartner prt = getPartner(sess);
 		if (prt!=null) {
-			VProjects lstPrj = new VProjects();
+			VProjects lstPrj = new VProjects(false);
 			lstPrj.addWhere(EProject.NAME, ConditionType.EQUAL, params.getProjectName());
 			if (lstPrj.getSize()>0) {
 				EProject prj = lstPrj.getProject(0);

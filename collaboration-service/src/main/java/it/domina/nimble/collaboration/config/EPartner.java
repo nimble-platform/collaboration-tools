@@ -82,7 +82,10 @@ public class EPartner extends AbstractStorable {
 		VSubscriptions lst = new VSubscriptions(this);
 		for (int i = 0; i < lst.getSize(); i++) {
 			ESubscription sub = lst.getSubscription(i);
-			prjout.add(sub.getProject());
+			EProject p =sub.getProject();
+			if (p.getStatus() == ProjectStatus.ACTIVE) {
+				prjout.add(p);
+			}
 		}
 		return prjout;
 	}
