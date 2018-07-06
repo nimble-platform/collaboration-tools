@@ -1,6 +1,7 @@
 package it.domina.nimble.collaboration.config;
 
 import java.util.List;
+import java.util.Vector;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -98,9 +99,9 @@ public class Config {
 			lstPrj.addWhere(EProject.NAME, ConditionType.EQUAL, params.getProjectName());
 			if (lstPrj.getSize()>0) {
 				EProject prj = lstPrj.getProject(0);
-				EInvite inv = getInvite(prt, prj, params.getUserID());
+				EInvite inv = getInvite(prt, prj, params.getUser());
 				if (inv==null) {
-					inv = new EInvite(prt, prj, params.getUserID());
+					inv = new EInvite(prt, prj, params.getUser());
 					inv.save();
 				}
 				return inv.getID().toString();
@@ -114,17 +115,32 @@ public class Config {
 		}
 	}
 	
-	public EInvite getInvite(EPartner prt, EProject prj, String userID) {
+	public EInvite getInvite(EPartner prt, EProject prj, String user) {
 		VInvites lst = new VInvites();
 		lst.addWhere(EInvite.PARTNER_FROM, ConditionType.EQUAL, prt.getID());
 		lst.addWhere(EInvite.PROJECT, ConditionType.EQUAL, prj.getID());
-		lst.addWhere(EInvite.USER, ConditionType.EQUAL, userID);
+		lst.addWhere(EInvite.USER, ConditionType.EQUAL, user);
 		if (lst.getSize()>0) {
 			return lst.getInvite(0);
 		}
 		return null;
 	}
-	
+
+	public List<EInvite> getInvites(Session sess)  throws Exception {
+		EPartner prt = getPartner(sess);
+		if (prt!=null) {
+			List<EInvite> invout = new Vector<EInvite>();
+			VInvites lst = new VInvites(sess.getUser().getUsername());
+			for (int i = 0; i < lst.getSize(); i++) {
+				invout.add(lst.getInvite(i));
+			}
+			return invout;
+		}
+		else {
+			throw new SubscriptionRequired();	
+		}
+	}
+
 	public EProject connectProject(Session sess, String inviteID) throws Exception {
 		EPartner prt = getPartner(sess);
 		if (prt!=null) {
@@ -132,6 +148,7 @@ public class Config {
 			EProject prj = inv.getProject();
 			ESubscription newSub = new ESubscription(prt, prj);
 			newSub.save();
+			inv.remove();
 			return prj;
 		}
 		else {
@@ -150,7 +167,6 @@ public class Config {
 		}
 	}
 
-	
     /*
     private Properties loadConfiguration( String fileName) {
         InputStream propsStream;

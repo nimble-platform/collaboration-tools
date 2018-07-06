@@ -21,6 +21,7 @@ import it.domina.nimble.collaboration.auth.type.CredentialType;
 import it.domina.nimble.collaboration.exceptions.SubscriptionRequired;
 import it.domina.nimble.collaboration.services.type.CollaborateType;
 import it.domina.nimble.collaboration.services.type.ConnectType;
+import it.domina.nimble.collaboration.services.type.InviteListType;
 import it.domina.nimble.collaboration.services.type.InviteType;
 import it.domina.nimble.collaboration.services.type.ProjectListType;
 import it.domina.nimble.collaboration.services.type.ProjectType;
@@ -129,6 +130,23 @@ public class Functions {
         return null;
     }
 
+    public static List<InviteType> getInviteList(String tokenid) throws Exception  {
+        CloseableHttpResponse response = null;
+    	TokenIdType params = new TokenIdType(tokenid);
+        response = sendPostCommand("/inviteList", params.toString());
+        String strData = logAndGetResponse(response);
+        if (response.getStatusLine().getStatusCode()==200) {
+            InviteListType lstInvite = InviteListType.mapJson(strData);
+            return lstInvite.getInviteList();
+        }
+        else {
+        	if (strData.equals(SubscriptionRequired.ERRCODE)) {
+        		throw new SubscriptionRequired();
+        	}
+        }
+    	closeResponse(response);
+    	return null;
+    }
     
     public static String connectProject(String tokenid, String inviteID) {
         CloseableHttpResponse response = null;
