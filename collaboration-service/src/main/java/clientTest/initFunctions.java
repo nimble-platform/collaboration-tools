@@ -4,6 +4,7 @@ import java.util.List;
 
 import clientTest.http.Functions;
 import it.domina.nimble.collaboration.exceptions.SubscriptionRequired;
+import it.domina.nimble.collaboration.services.type.InviteType;
 import it.domina.nimble.collaboration.services.type.ProjectType;
 
 public class initFunctions {
@@ -74,8 +75,13 @@ public class initFunctions {
 				//Subscribe to Project
 				if (!find) {
 					if (inviteID!=null) {
-						projectName = Functions.connectProject(idTokenCustomer, inviteID);
-						find = true;
+						List<InviteType> lstInvites = Functions.getInviteList(idTokenCustomer);
+						for (InviteType inv: lstInvites) {
+							if (inviteID==inv.getId()) {
+								projectName = Functions.connectProject(idTokenCustomer, inviteID);
+								find = true;
+							}
+						}
 					}
 				}
 

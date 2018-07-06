@@ -89,6 +89,5 @@ public class EPartner extends AbstractStorable {
 		}
 		return prjout;
 	}
-
 	
 }
