@@ -44,25 +44,26 @@ public class ServiceConfig {
 		return instance;
 	}
 
-	private KafkaCfg    					kafkcaConfiguration;
+	//private KafkaCfg    					kafkcaConfiguration;
 	private Authentication 					authentication;
 	private Store 							dbconn;
-	private DBFiles							repository;
+	//private DBFiles							repository;
 	private Config 							config;
 	private HashMap<String, Connector> 		activeCollaborations;
 	
 	
 	private ServiceConfig(String basedir) {
 		String classesDir = basedir + File.separator + "WEB-INF" + File.separator +"classes";
-		this.kafkcaConfiguration = new KafkaCfg(classesDir);
+		//this.kafkcaConfiguration = new KafkaCfg(classesDir);
 		this.authentication = new Authentication(classesDir);
 		this.dbconn = new MYSQLDB(classesDir);
-		this.repository = new DBFiles(classesDir);
+		//this.repository = new DBFiles(classesDir);
 		this.config = new Config();
 		this.activeCollaborations = new HashMap<String, Connector>();
 		logger.log(Level.INFO, "Configuration initialized");
 	}
-	
+
+	/*
 	public DBFiles getRepository() {
 		return this.repository;
 	}
@@ -70,6 +71,7 @@ public class ServiceConfig {
 	public KafkaCfg getKafkaConfig() {
 		return this.kafkcaConfiguration;
 	}
+	*/
 	
 	public Authentication getAuth() {
 		return this.authentication;
@@ -120,6 +122,11 @@ public class ServiceConfig {
 	public boolean saveResource(SaveResourceType params, Session sess) throws Exception {
 		EPartner prt = this.config.getPartner(sess);
 		Connector conn = this.activeCollaborations.get(params.getResource().getProjectName());
+		if (conn==null) {
+			CollaborateType ct  = new CollaborateType(params.getToken(),params.getResource().getProjectName(), null);
+			startCollaboration(ct,sess);
+			conn = this.activeCollaborations.get(params.getResource().getProjectName());
+		}
 		if (conn!=null) {
 			return conn.saveResource(params.getResource(), prt);
 		}
@@ -162,6 +169,11 @@ public class ServiceConfig {
 	public ResourceType deleteResource(ReadResourceType params, Session sess) throws Exception {
 		EPartner prt = this.config.getPartner(sess);
 		Connector conn = this.activeCollaborations.get(params.getProjectName());
+		if (conn==null) {
+			CollaborateType ct  = new CollaborateType(params.getToken(),params.getProjectName(), null);
+			startCollaboration(ct,sess);
+			conn = this.activeCollaborations.get(params.getProjectName());
+		}
 		if (conn!=null) {
 			return conn.deleteResource(params, prt);
 		}

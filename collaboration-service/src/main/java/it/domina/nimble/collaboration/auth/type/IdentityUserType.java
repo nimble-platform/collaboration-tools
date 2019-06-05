@@ -37,9 +37,18 @@ public class IdentityUserType extends JsonType  {
 	private String phoneNumber;
 	private String userID;
 	private String companyID;
-	private String companyName;
+	private CompanyNameType companyName;
 	private String accessToken;
 	
+	public IdentityUserType(){}
+
+	public IdentityUserType(String userID, String token){
+		this.userID = userID;
+		this.username = userID;
+		this.email = userID;
+		this.accessToken = token;
+	}
+
 	
 	public String getUsername() {
 		return username;
@@ -68,7 +77,7 @@ public class IdentityUserType extends JsonType  {
 	public String getCompanyID() {
 		return companyID;
 	}
-	public String getCompanyName() {
+	public CompanyNameType getCompanyName() {
 		return companyName;
 	}
 	public String getAccessToken() {
