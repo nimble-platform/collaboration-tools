@@ -24,14 +24,10 @@ public class EndPoint {
 	
 	private Connector conn; 
 	private EPartner partner; 
-    private final KafkaProducer<String, String> kafkaProducer;
-    private final KafkaConsumer<String, String> kafkaConsumer;
 
     public EndPoint (Connector cn, EPartner p) throws Exception{
     	this.conn = cn;
     	this.partner = p;
-    	this.kafkaProducer = ServiceConfig.getInstance().getKafkaConfig().newProducer(p, this.conn.getKafkaTopic());
-    	this.kafkaConsumer = ServiceConfig.getInstance().getKafkaConfig().newConsumer(p, this.conn.getKafkaTopic());
     	readMsg(new ReadMessageType());
     }
     
@@ -46,14 +42,14 @@ public class EndPoint {
     		String key = msg.getUniqueID();
     		String message = msg.toString();
 
-            ProducerRecord<String, String> record = new ProducerRecord<String, String>(conn.getKafkaTopic(), key, message);
+            //ProducerRecord<String, String> record = new ProducerRecord<String, String>(conn.getKafkaTopic(), key, message);
             // Send record asynchronously
-            Future<RecordMetadata> future = this.kafkaProducer.send(record);
+            //Future<RecordMetadata> future = this.kafkaProducer.send(record);
             // Synchronously wait for a response from Message Hub / Kafka on every message produced.
             // For high throughput the future should be handled asynchronously.
-            RecordMetadata recordMetadata = future.get(5000, TimeUnit.MILLISECONDS);
+            //RecordMetadata recordMetadata = future.get(5000, TimeUnit.MILLISECONDS);
             
-            logger.log(Level.INFO, "Message produced, offset: " + recordMetadata.offset());
+            //logger.log(Level.INFO, "Message produced, offset: " + recordMetadata.offset());
             return true;
 		} catch (Exception e) {
 			logger.log(Level.ERROR,e);
@@ -65,8 +61,8 @@ public class EndPoint {
 
         try {
             // Poll on the Kafka consumer, waiting up to 3 secs if there's nothing to consume.
-            ConsumerRecords<String, String> records = this.kafkaConsumer.poll(3000);
-            
+            //ConsumerRecords<String, String> records = this.kafkaConsumer.poll(3000);
+            /*
             if (records.isEmpty()) {
                 logger.log(Level.INFO, "No messages consumed");
             } else {
@@ -77,6 +73,7 @@ public class EndPoint {
                     params.getMessages().add(msg);
                 }
             }
+            */
             
             return true;
             
@@ -88,8 +85,8 @@ public class EndPoint {
 
     public void close() {
     	this.conn = null;
-    	this.kafkaConsumer.close();
-    	this.kafkaProducer.close(5000, TimeUnit.MILLISECONDS);
+    	//this.kafkaConsumer.close();
+    	//this.kafkaProducer.close(5000, TimeUnit.MILLISECONDS);
     }
     
 }

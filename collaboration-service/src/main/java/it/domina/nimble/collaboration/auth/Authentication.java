@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -19,12 +22,13 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import it.domina.nimble.collaboration.auth.type.CredentialType;
+import it.domina.nimble.collaboration.auth.type.EmailType;
 import it.domina.nimble.collaboration.auth.type.IdentityUserType;
 import it.domina.nimble.collaboration.core.Session;
 
 public class Authentication {
 
-	private static String BASE_URL = "https://nimble-platform.salzburgresearch.at/nimble/identity";
+	private static String BASE_URL = "http://161.156.70.122/identity";
 	
 	private static final Logger logger = Logger.getLogger(Authentication.class);
 	
@@ -90,12 +94,19 @@ public class Authentication {
 	}
 
 	public IdentityUserType getUserDetail(String token) {
+		String[] token_part = token.split("\\.");
+		byte[] userDataPart = Base64.getDecoder().decode(token_part[1]);
+		String userDataStr = new String(userDataPart, StandardCharsets.UTF_8) ;
+		EmailType em = EmailType.mapJson(userDataStr);
+		return new IdentityUserType(em.getEmail(),token); 
+				/*
 		if (this.forceGranted) {
 			return this.authenticateUsers.get(token);
 		}
 		else{
 			return null;
 		}
+		*/
 	}
 	
     private Properties loadConfiguration( String fileName) {

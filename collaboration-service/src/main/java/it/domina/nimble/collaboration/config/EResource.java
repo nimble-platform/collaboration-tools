@@ -23,6 +23,7 @@ public class EResource extends AbstractStorable {
 	public static final String USER = "USER";
 	public static final String NOTES = "NOTES";
 	public static final String LASTUPDATE = "LASTUPDATE";
+	public static final String EXT = "EXT";
 	
 	private EResource _parentToSave = null;
 	
@@ -40,12 +41,13 @@ public class EResource extends AbstractStorable {
 		super.load(id);
 	}
 
-	public EResource(EProject prj, String key, String type, String name) {
+	public EResource(EProject prj, String key, String type, String name, String ext) {
 		this();
 		super.data.getField("res_idprj").setValue(prj);
 		super.data.getField("res_key").setValue(key);
 		super.data.getField("res_type").setValue(type);
 		super.data.getField("res_name").setValue(name);
+		super.data.getField("res_ext").setValue(ext);
 		EResource parent = getParentResourceByKey(key);
 		super.data.getField("res_idres").setValue(parent);
 	}
@@ -76,6 +78,14 @@ public class EResource extends AbstractStorable {
 	
 	public void setName(String name){
 		super.data.getField("res_name").setValue(name);
+	}
+
+	public String getExt() {
+		return super.data.getField("res_ext").getStringValue();
+	}
+
+	public void setExt(String e){
+		super.data.getField("res_ext").setValue(e);
 	}
 
 	public String getType() {
@@ -121,6 +131,85 @@ public class EResource extends AbstractStorable {
 	
 	public Date getLastDate() {
 		return super.data.getField("res_lastUpdate").getDateValue();
+	}
+	
+	public String getRawData() {
+		String resData = "";
+		VResourcesData lstData = new VResourcesData(this,"R");
+		for (Integer i= 0; i<lstData.getSize();i++) {
+			EResourceData rd = lstData.getResourceData(i);
+			resData+=rd.getData();
+		}
+		return resData;
+	}
+	
+	public void setRawData(String rawData) {
+		if (rawData != null) {
+			Integer ord = 0;
+			while (rawData.length()>0) {
+				try {
+					ord++;
+					String tmpData = "";
+					if (rawData.length()>9999) {
+						tmpData = rawData.substring(0, 9999);
+					}
+					else {
+						tmpData = rawData;
+					}
+					EResourceData resData = new EResourceData(this,ord.longValue(),"R");
+					resData.setData(tmpData);
+					resData.save();
+					if (rawData.length()>9999) {
+						rawData = rawData.substring(9999, rawData.length());
+					}
+					else {
+						rawData = "";
+					}
+				} catch (Exception e) {
+					return;
+				}
+			}
+		}
+	}
+
+	public String getImageData() {
+		String resData = "";
+		VResourcesData lstData = new VResourcesData(this,"I");
+		for (Integer i= 0; i<lstData.getSize();i++) {
+			EResourceData rd = lstData.getResourceData(i);
+			resData+=rd.getData();
+		}
+		return resData;
+	}
+
+	public void setImageData(String imageData) {
+		if (imageData != null) {
+			Integer ord = 0;
+			while (imageData.length()>0) {
+				try {
+					ord++;
+					String tmpData = "";
+					if (imageData.length()>9999) {							
+						tmpData = imageData.substring(0, 9999);
+					}
+					else {
+						tmpData = imageData;
+					}
+					EResourceData resData = new EResourceData(this,ord.longValue(),"I");
+					resData.setData(tmpData);
+					resData.save();
+					if (imageData.length()>9999) {
+						imageData = imageData.substring(9999, imageData.length());
+					}
+					else {
+						imageData = "";
+					}
+				} catch (Exception e) {
+					return;
+				}
+			}
+		}
+		
 	}
 	
 	public List<EResourceLog> getResourcesHistory() throws Exception {

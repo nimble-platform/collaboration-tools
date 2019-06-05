@@ -7,6 +7,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import it.domina.lib.store.ConditionType;
+import it.domina.nimble.collaboration.ServiceConfig;
 import it.domina.nimble.collaboration.core.Session;
 import it.domina.nimble.collaboration.exceptions.ElementAlreadyPresenet;
 import it.domina.nimble.collaboration.exceptions.ProjectNotFound;
@@ -163,7 +164,9 @@ public class Config {
 			return prt.getSubscriptions();
 		}
 		else {
-			throw new SubscriptionRequired();	
+			prt = newPartner(sess);
+			return prt.getSubscriptions();
+			//throw new SubscriptionRequired();	
 		}
 	}
 

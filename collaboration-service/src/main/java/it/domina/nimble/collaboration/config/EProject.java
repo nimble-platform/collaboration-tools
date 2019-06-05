@@ -77,12 +77,14 @@ public class EProject extends AbstractStorable {
 			result = lstRes.getResource(0);	
 		}
 		else {
-			result = new EResource(this, res.getKey(), res.getType(), res.getName());	
+			result = new EResource(this, res.getKey(), res.getType(), res.getName(),res.getExt());	
 		}
 		result.setUser(user);
 		result.setVersion(res.getVersion());
 		result.setNotes(res.getNotes());
 		result.save();
+		result.setRawData(res.getResource());
+		result.setImageData(res.getImageData());
 		return result;
 	}
 

@@ -76,7 +76,7 @@ public class resourcesSaveFunctions {
 			source.close();
 			source = null;
 			byte[] data2 = IOUtils.toByteArray(dest);
-			res.setResource(new BytesType(data2));
+		//	res.setResource(new BytesType(data2));
 			SaveResourceType resToSave = new SaveResourceType(idToken,res);
 			System.out.println(resToSave);
 			Functions.saveResources(resToSave);
@@ -88,7 +88,7 @@ public class resourcesSaveFunctions {
 			source.close();
 			source = null;
 			data2 = IOUtils.toByteArray(dest);
-			res.setResource(new BytesType(data2));
+		//	res.setResource(new BytesType(data2));
 			resToSave = new SaveResourceType(idToken,res);
 			System.out.println(resToSave);
 			

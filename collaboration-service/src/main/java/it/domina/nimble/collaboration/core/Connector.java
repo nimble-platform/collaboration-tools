@@ -3,6 +3,7 @@ package it.domina.nimble.collaboration.core;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +22,6 @@ import it.domina.nimble.collaboration.config.EResource;
 import it.domina.nimble.collaboration.config.EResourceLog;
 import it.domina.nimble.collaboration.exceptions.PermissionDenied;
 import it.domina.nimble.collaboration.exceptions.ResourceNotFound;
-import it.domina.nimble.collaboration.kafka.KafkaCfg;
 import it.domina.nimble.collaboration.services.type.CollabMessageType;
 import it.domina.nimble.collaboration.services.type.ReadMessageType;
 import it.domina.nimble.collaboration.services.type.ReadResourceType;
@@ -33,14 +33,14 @@ public class Connector {
 	private static final Logger logger = Logger.getLogger(Connector.class);
 
 	private EProject					project;
-	private DBFilesFolder				resourcesFolder;
+	//private DBFilesFolder				resourcesFolder;
 	private HashMap<String, EndPoint> 	activePartners;
 	
 	public Connector(EProject prj) throws Exception {
 		this.project = prj;
 		this.activePartners = new HashMap<String, EndPoint>();
-		checkKafkaTopic();
-		checkRepository();
+		//checkKafkaTopic();
+		//checkRepository();
 		logger.log(Level.INFO, "Connector initialize");
 	}
 
@@ -77,6 +77,7 @@ public class Connector {
 	public Boolean saveResource(ResourceType res, EPartner prt) throws Exception {
 		EndPoint ep = this.activePartners.get(prt.getUserId());
 		if (ep!=null) {
+			/*
 			DBFilesFolder resFolder = searchFolder(res.getKey(), true);
 			if (res.getType().equals(ResourceType.RESOURCE_TYPE)) {
 				Integer lastVersionNumber = getLastVersionNumeber(resFolder); 
@@ -88,6 +89,7 @@ public class Connector {
 			else {
 				res.setVersion(Long.valueOf(1));
 			}
+			*/
 			this.project.saveResource(res, prt.getUsername());
 			return true;
 		}
@@ -145,6 +147,12 @@ public class Connector {
 	public ResourceType deleteResource(ReadResourceType params, EPartner prt) throws Exception {
 		EndPoint ep = this.activePartners.get(prt.getUserId());
 		if (ep!=null) {
+			EResource r = this.project.getResourceDescription(params.getResourceName());
+			if (r!=null) {
+				r.remove();
+			}
+			
+			/*
 			DBFilesFolder resFolder = searchFolder(params.getResourceName(), false);
 			if (resFolder!=null) {
 				ResourceType result = null;
@@ -180,6 +188,8 @@ public class Connector {
 			else {
 				throw new ResourceNotFound();
 			}
+			*/
+			return null;
 		}
 		else {
 			throw new PermissionDenied();
@@ -189,6 +199,18 @@ public class Connector {
 	public ResourceType readResource(ReadResourceType params, EPartner prt) throws Exception {
 		EndPoint ep = this.activePartners.get(prt.getUserId());
 		if (ep!=null) {
+			EResource r = this.project.getResourceDescription(params.getResourceName());
+			if (r!=null) {
+				ResourceType result = new ResourceType(this.project.getName(),r.getKey(),r.getType(),r.getExt());
+				result.setUser(r.getUser());
+				result.setVersion(r.getVersion());
+				result.setNotes(r.getNotes());
+				result.setLastUpdate(r.getLastDate());
+				result.setResource(r.getRawData());
+				result.setImageData(r.getImageData());
+				return result;
+			}
+			/*
 			DBFilesFolder resFolder = searchFolder(params.getResourceName(), false);
 			if (resFolder!=null) {
 				Integer lastVersionNumber;
@@ -211,6 +233,8 @@ public class Connector {
 			else {
 				throw new ResourceNotFound();
 			}
+			*/
+			return null;
 		}
 		else {
 			throw new PermissionDenied();
@@ -223,6 +247,7 @@ public class Connector {
 		}
 	}
 	
+	/*
 	private DBFilesFolder searchFolder(String path, Boolean create)  {
 		DBFilesFolder currentFolder = this.resourcesFolder;
 		String[] names = path.split(ResourceType.RESOURCE_SEPARATOR); 
@@ -264,6 +289,7 @@ public class Connector {
 		}
 		return true;
 	}
+	 */
 
 	private Integer getLastVersionNumeber(DBFilesFolder resFolder) {
 		List<DBFilesFile> files = resFolder.getFilesList();

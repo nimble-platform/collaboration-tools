@@ -28,7 +28,8 @@ public class ResourceType extends JsonType {
    	private String ext;
    	private String user;
    	private Long version;
-   	private BytesType resource;
+   	private String resource;
+   	private String image;
    	private String notes;
    	private Date lastUpdate; 
    	
@@ -83,12 +84,30 @@ public class ResourceType extends JsonType {
     	this.version = ver;
     }
 
+    public String getResource(){
+    	return this.resource;
+    }
+
+    public void setResource(String res) {
+    	this.resource = res;
+    }
+
+    /*
     public BytesType getResource(){
     	return this.resource;
     }
 
     public void setResource(BytesType res) {
     	this.resource = res;
+    }
+    */
+
+    public String getImageData(){
+    	return this.image;
+    }
+
+    public void setImageData(String res) {
+    	this.image = res;
     }
 
     public String getNotes(){
