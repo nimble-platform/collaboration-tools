@@ -75,26 +75,42 @@ public class EProject extends AbstractStorable {
 		lstRes.addWhere(EResource.KEY, ConditionType.EQUAL, res.getKey());
 		if (lstRes.getSize()>0) {
 			result = lstRes.getResource(0);	
+			res.setVersion(result.getVersion()+1);
 		}
 		else {
 			result = new EResource(this, res.getKey(), res.getType(), res.getName(),res.getExt());	
+			res.setVersion(Long.valueOf(1));
 		}
 		result.setUser(user);
 		result.setVersion(res.getVersion());
 		result.setNotes(res.getNotes());
-		result.save();
 		result.setRawData(res.getResource());
 		result.setImageData(res.getImageData());
+		result.save();
 		return result;
 	}
-
-	public EResource getResourceDescription(String name) throws Exception {
+	
+	public EResource getResourceDescription(String name, Integer version) throws Exception {
 		VResources lstRes = new VResources(this);
 		if (name!=null) {
 			lstRes.addWhere(EResource.KEY, ConditionType.EQUAL, name);
 		}
+		if (version!=null)
+		{
+			lstRes.addWhere(EResource.VERSION, ConditionType.EQUAL, version);
+		}
 		if (lstRes.getSize()>0) {
 			return lstRes.getResource(0);
+		}
+		else
+		{
+			lstRes.clearWhere();
+			if (name!=null) {
+				lstRes.addWhere(EResource.KEY, ConditionType.EQUAL, name);
+			}
+			if (lstRes.getSize()>0) {
+				return lstRes.getResource(0);
+			}
 		}
 		return null;
 	}

@@ -26,6 +26,8 @@ public class EResource extends AbstractStorable {
 	public static final String EXT = "EXT";
 	
 	private EResource _parentToSave = null;
+	private String _rawData;
+	private String _imageData;
 	
 	private EResource(){
 		super("resources", "res_id", ServiceConfig.getInstance().getStore());
@@ -34,11 +36,15 @@ public class EResource extends AbstractStorable {
 	protected EResource(Row data){
 		this();
 		super.setValues(data);
+		loadRawData();
+		loadImageData();
 	}
 
 	public EResource(Long id) throws RecordNotFound{
 		this();
 		super.load(id);
+		loadRawData();
+		loadImageData();
 	}
 
 	public EResource(EProject prj, String key, String type, String name, String ext) {
@@ -134,87 +140,42 @@ public class EResource extends AbstractStorable {
 	}
 	
 	public String getRawData() {
-		String resData = "";
-		VResourcesData lstData = new VResourcesData(this,"R");
-		for (Integer i= 0; i<lstData.getSize();i++) {
-			EResourceData rd = lstData.getResourceData(i);
-			resData+=rd.getData();
-		}
-		return resData;
+		return this._rawData;
 	}
 	
 	public void setRawData(String rawData) {
-		if (rawData != null) {
-			Integer ord = 0;
-			while (rawData.length()>0) {
-				try {
-					ord++;
-					String tmpData = "";
-					if (rawData.length()>9999) {
-						tmpData = rawData.substring(0, 9999);
-					}
-					else {
-						tmpData = rawData;
-					}
-					EResourceData resData = new EResourceData(this,ord.longValue(),"R");
-					resData.setData(tmpData);
-					resData.save();
-					if (rawData.length()>9999) {
-						rawData = rawData.substring(9999, rawData.length());
-					}
-					else {
-						rawData = "";
-					}
-				} catch (Exception e) {
-					return;
-				}
-			}
-		}
+		this._rawData = rawData;
 	}
 
 	public String getImageData() {
-		String resData = "";
-		VResourcesData lstData = new VResourcesData(this,"I");
-		for (Integer i= 0; i<lstData.getSize();i++) {
-			EResourceData rd = lstData.getResourceData(i);
-			resData+=rd.getData();
-		}
-		return resData;
+		return this._imageData;
 	}
 
 	public void setImageData(String imageData) {
-		if (imageData != null) {
-			Integer ord = 0;
-			while (imageData.length()>0) {
-				try {
-					ord++;
-					String tmpData = "";
-					if (imageData.length()>9999) {							
-						tmpData = imageData.substring(0, 9999);
-					}
-					else {
-						tmpData = imageData;
-					}
-					EResourceData resData = new EResourceData(this,ord.longValue(),"I");
-					resData.setData(tmpData);
-					resData.save();
-					if (imageData.length()>9999) {
-						imageData = imageData.substring(9999, imageData.length());
-					}
-					else {
-						imageData = "";
-					}
-				} catch (Exception e) {
-					return;
-				}
-			}
-		}
-		
+		this._imageData = imageData;
 	}
 	
-	public List<EResourceLog> getResourcesHistory() throws Exception {
+	/*
+	private EResourceLog getCurrenResourcesLog() throws Exception {
 		List<EResourceLog> result = new Vector<EResourceLog>();
 		VResourcesLog lstRes = new VResourcesLog(this);
+		lstRes.addWhere(EResourceLog.VERSION, ConditionType.EQUAL, this.getVersion());
+		if (lstRes.getSize()>0) {
+			return lstRes.getResourceLog(0);
+		}
+		else {
+			return null;
+		}
+	}
+	*/
+
+	
+	public List<EResourceLog> getResourcesHistory(Integer version) throws Exception {
+		List<EResourceLog> result = new Vector<EResourceLog>();
+		VResourcesLog lstRes = new VResourcesLog(this);
+		if (version!=null) {
+			lstRes.addWhere(EResourceLog.VERSION, ConditionType.EQUAL, version);
+		}
 		for (int i = 0; i < lstRes.getSize(); i++) {
 			result.add(lstRes.getResourceLog(i));
 		}
@@ -244,10 +205,108 @@ public class EResource extends AbstractStorable {
 		}
 		super.data.getField("res_lastUpdate").setValue(new Date());
 		if (super.save()) {
+			saveRawData();
+			saveImageData();
 			EResourceLog log = new EResourceLog(this);
 			return log.save();
 		}
 		return false; 
+	}
+	
+	private void loadRawData() {
+		String resData = "";
+		VResourcesData lstData = new VResourcesData(this,"R");
+		for (Integer i= 0; i<lstData.getSize();i++) {
+			EResourceData rd = lstData.getResourceData(i);
+			resData+=rd.getData();
+		}
+		this._rawData = resData;
+	}
+	
+	private void loadImageData() {
+		String resData = "";
+		VResourcesData lstData = new VResourcesData(this,"I");
+		for (Integer i= 0; i<lstData.getSize();i++) {
+			EResourceData rd = lstData.getResourceData(i);
+			resData+=rd.getData();
+		}
+		this._imageData = resData;
+	}
+	
+	private void saveRawData() {
+		if (this._rawData!= null) {
+			String rd = this._rawData; 
+			Integer ord = 0;
+			VResourcesData lstData = new VResourcesData(this,"R");
+			for (Integer i= 0; i< lstData.getSize();i++) {
+				EResourceData el = lstData.getResourceData(i);
+				try {
+					el.remove();
+				} catch (Exception e) {
+				}
+			}
+			while (rd.length()>0) {
+				try {
+					ord++;
+					String tmpData = "";
+					if (rd.length()>9999) {
+						tmpData = rd.substring(0, 9999);
+					}
+					else {
+						tmpData = rd;
+					}
+					EResourceData resData = new EResourceData(this,ord.longValue(),"R");
+					resData.setData(tmpData);
+					resData.save();
+					if (rd.length()>9999) {
+						rd = rd.substring(9999, rd.length());
+					}
+					else {
+						rd = "";
+					}
+				} catch (Exception e) {
+					return;
+				}
+			}
+		}
+	}
+	
+	private void saveImageData() {
+		if (this._imageData != null) {
+			String id = this._imageData; 
+			Integer ord = 0;
+			VResourcesData lstData = new VResourcesData(this,"I");
+			for (Integer i= 0; i< lstData.getSize();i++) {
+				EResourceData el = lstData.getResourceData(i);
+				try {
+					el.remove();
+				} catch (Exception e) {
+				}
+			}
+			while (id.length()>0) {
+				try {
+					ord++;
+					String tmpData = "";
+					if (id.length()>9999) {							
+						tmpData = id.substring(0, 9999);
+					}
+					else {
+						tmpData = id;
+					}
+					EResourceData resData = new EResourceData(this,ord.longValue(),"I");
+					resData.setData(tmpData);
+					resData.save();
+					if (id.length()>9999) {
+						id = id.substring(9999, id.length());
+					}
+					else {
+						id = "";
+					}
+				} catch (Exception e) {
+					return;
+				}
+			}
+		}
 	}
 	
 	private EResource getParentResourceByKey(String resourceKey) {
