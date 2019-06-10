@@ -29,7 +29,7 @@ public class VResourcesData extends AbstractVistaStore {
 
 	public VResourcesData(EResourceLog resl, String type){
 		super("resources_data", EResourceData.ID, ServiceConfig.getInstance().getStore());
-		addColumn(EResourceData.ID, "rsd_id");
+		addColumn(EResourceData.ID, "rds_id");
 		addColumn(EResourceData.RESOURSE, "rsd_resid");
 		addColumn(EResourceData.RESOURSE_LOG, "rsd_rslid");
 		addColumn(EResourceData.TYPE, "rsd_type");

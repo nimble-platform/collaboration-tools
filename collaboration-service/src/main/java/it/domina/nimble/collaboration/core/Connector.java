@@ -1,27 +1,16 @@
 package it.domina.nimble.collaboration.core;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-import it.domina.lib.dbfile.DBFiles;
-import it.domina.lib.dbfile.DBFilesFile;
-import it.domina.lib.dbfile.DBFilesFolder;
-import it.domina.lib.dbfile.exceptions.FolderNotFound;
-import it.domina.nimble.collaboration.ServiceConfig;
 import it.domina.nimble.collaboration.config.EPartner;
 import it.domina.nimble.collaboration.config.EProject;
 import it.domina.nimble.collaboration.config.EResource;
 import it.domina.nimble.collaboration.config.EResourceLog;
 import it.domina.nimble.collaboration.exceptions.PermissionDenied;
-import it.domina.nimble.collaboration.exceptions.ResourceNotFound;
 import it.domina.nimble.collaboration.services.type.CollabMessageType;
 import it.domina.nimble.collaboration.services.type.ReadMessageType;
 import it.domina.nimble.collaboration.services.type.ReadResourceType;
@@ -103,7 +92,7 @@ public class Connector {
 		if (ep!=null) {
 			List<EResource> lstRes;
 			if (resReference.getName() != null) {
-				EResource r = this.project.getResourceDescription(resReference.getName());
+				EResource r = this.project.getResourceDescription(resReference.getName(), resReference.getVersion().intValue());
 				lstRes = this.project.getResourcesList(r);
 			}
 			else {
@@ -127,8 +116,8 @@ public class Connector {
 		EndPoint ep = this.activePartners.get(prt.getUserId());
 		if (ep!=null) {
 			if (resReference.getName() != null) {
-				EResource r = this.project.getResourceDescription(resReference.getName());
-				List<EResourceLog> lstRes = r.getResourcesHistory();
+				EResource r = this.project.getResourceDescription(resReference.getName(), null);
+				List<EResourceLog> lstRes = r.getResourcesHistory(null);
 				for (EResourceLog rlog : lstRes) {
 					ResourceListType newRes = new ResourceListType(resReference, null, resReference.getType());
 					newRes.setUser(rlog.getUser());
@@ -147,7 +136,7 @@ public class Connector {
 	public ResourceType deleteResource(ReadResourceType params, EPartner prt) throws Exception {
 		EndPoint ep = this.activePartners.get(prt.getUserId());
 		if (ep!=null) {
-			EResource r = this.project.getResourceDescription(params.getResourceName());
+			EResource r = this.project.getResourceDescription(params.getResourceName(), params.getResourceVersion());
 			if (r!=null) {
 				r.remove();
 			}
@@ -199,16 +188,33 @@ public class Connector {
 	public ResourceType readResource(ReadResourceType params, EPartner prt) throws Exception {
 		EndPoint ep = this.activePartners.get(prt.getUserId());
 		if (ep!=null) {
-			EResource r = this.project.getResourceDescription(params.getResourceName());
+			EResource r = this.project.getResourceDescription(params.getResourceName(), params.getResourceVersion());
 			if (r!=null) {
-				ResourceType result = new ResourceType(this.project.getName(),r.getKey(),r.getType(),r.getExt());
-				result.setUser(r.getUser());
-				result.setVersion(r.getVersion());
-				result.setNotes(r.getNotes());
-				result.setLastUpdate(r.getLastDate());
-				result.setResource(r.getRawData());
-				result.setImageData(r.getImageData());
-				return result;
+				if (r.getVersion()==params.getResourceVersion().intValue()) {
+					ResourceType result = new ResourceType(this.project.getName(),r.getKey(),r.getType(),r.getExt());
+					result.setUser(r.getUser());
+					result.setVersion(r.getVersion());
+					result.setNotes(r.getNotes());
+					result.setLastUpdate(r.getLastDate());
+					result.setResource(r.getRawData());
+					result.setImageData(r.getImageData());
+					return result;
+				}
+				else {
+					List<EResourceLog> lstLogs = r.getResourcesHistory(params.getResourceVersion().intValue());
+					if (lstLogs.size() > 0 ){
+						EResourceLog el = lstLogs.get(0);
+						ResourceType result = new ResourceType(this.project.getName(),r.getKey(),r.getType(),r.getExt());
+						result.setUser(el.getUser());
+						result.setVersion(el.getVersion());
+						result.setNotes(el.getNotes());
+						result.setLastUpdate(el.getTimestamp());
+						result.setResource(el.getRawData());
+						result.setImageData(el.getImageData());
+						return result;
+						
+					}
+				}
 			}
 			/*
 			DBFilesFolder resFolder = searchFolder(params.getResourceName(), false);
@@ -289,7 +295,6 @@ public class Connector {
 		}
 		return true;
 	}
-	 */
 
 	private Integer getLastVersionNumeber(DBFilesFolder resFolder) {
 		List<DBFilesFile> files = resFolder.getFilesList();
@@ -304,5 +309,6 @@ public class Connector {
 		}
 		return lastNumber;
 	}
+	 */
 	
 }
