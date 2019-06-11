@@ -22,6 +22,11 @@ public class EResource extends AbstractStorable {
 	public static final String VERSION = "VERSION";
 	public static final String USER = "USER";
 	public static final String NOTES = "NOTES";
+	public static final String SEASON = "SEASON";
+	public static final String SECTOR = "SECTOR";
+	public static final String COMPOSITION = "COMPOSITION";
+	public static final String CURRENCY = "CURRENCY";
+	public static final String PRICE = "PRICE";
 	public static final String LASTUPDATE = "LASTUPDATE";
 	public static final String EXT = "EXT";
 	
@@ -133,6 +138,46 @@ public class EResource extends AbstractStorable {
 	
 	public void setNotes(String note){
 		super.data.getField("res_notes").setValue(note);
+	}
+	
+	public String getSeason() {
+		return super.data.getField("res_season").getStringValue();
+	}
+	
+	public void setSeason(String s){
+		super.data.getField("res_season").setValue(s);
+	}
+
+	public String getSector() {
+		return super.data.getField("res_sector").getStringValue();
+	}
+	
+	public void setSector(String s){
+		super.data.getField("res_sector").setValue(s);
+	}
+
+	public String getComposition() {
+		return super.data.getField("res_composition").getStringValue();
+	}
+	
+	public void setComposition(String c){
+		super.data.getField("res_composition").setValue(c);
+	}
+
+	public String getCurrency() {
+		return super.data.getField("res_currency").getStringValue();
+	}
+	
+	public void setCurrency(String c){
+		super.data.getField("res_currency").setValue(c);
+	}
+
+	public String getPrice() {
+		return super.data.getField("res_price").getStringValue();
+	}
+	
+	public void setPrice(String p){
+		super.data.getField("res_price").setValue(p);
 	}
 	
 	public Date getLastDate() {

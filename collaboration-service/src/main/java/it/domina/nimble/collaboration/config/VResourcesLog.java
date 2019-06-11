@@ -17,6 +17,11 @@ public class VResourcesLog extends AbstractVistaStore {
 		addColumn(EResourceLog.VERSION, "rsl_version");
 		addColumn(EResourceLog.USER, "rsl_user");
 		addColumn(EResourceLog.NOTES, "rsl_notes");
+		addColumn(EResourceLog.SEASON, "rsl_season");
+		addColumn(EResourceLog.SECTOR, "rsl_sector");
+		addColumn(EResourceLog.COMPOSITION, "rsl_composition");
+		addColumn(EResourceLog.CURRENCY, "rsl_currency");
+		addColumn(EResourceLog.PRICE, "rsl_price");
 		addColumn(EResourceLog.TIMESTAMP, "rsl_date");
 		this.resource = res;
 		clearWhere();

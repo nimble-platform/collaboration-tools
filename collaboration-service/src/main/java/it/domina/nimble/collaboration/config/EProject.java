@@ -84,6 +84,11 @@ public class EProject extends AbstractStorable {
 		result.setUser(user);
 		result.setVersion(res.getVersion());
 		result.setNotes(res.getNotes());
+		result.setSeason(res.getSeason());
+		result.setSector(res.getSector());
+		result.setComposition(res.getComposition());
+		result.setCurrency(res.getCurrency());
+		result.setPrice(res.getPrice());
 		result.setRawData(res.getResource());
 		result.setImageData(res.getImageData());
 		result.save();

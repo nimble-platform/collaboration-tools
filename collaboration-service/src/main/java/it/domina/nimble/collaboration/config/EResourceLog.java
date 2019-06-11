@@ -14,6 +14,13 @@ public class EResourceLog extends AbstractStorable {
 	public static final String VERSION = "VERSION";
 	public static final String USER = "USER";
 	public static final String NOTES = "NOTES";
+	
+	public static final String SEASON = "SEASON";
+	public static final String SECTOR = "SECTOR";
+	public static final String COMPOSITION = "COMPOSITION";
+	public static final String CURRENCY = "CURRENCY";
+	public static final String PRICE = "PRICE";
+
 	public static final String TIMESTAMP = "TIMESTAMP";
 	
 	private String strRawData;
@@ -43,6 +50,11 @@ public class EResourceLog extends AbstractStorable {
 		super.data.getField("rsl_version").setValue(res.getVersion());
 		super.data.getField("rsl_user").setValue(res.getUser());
 		super.data.getField("rsl_notes").setValue(res.getNotes());
+		super.data.getField("rsl_season").setValue(res.getSeason());
+		super.data.getField("rsl_sector").setValue(res.getSector());
+		super.data.getField("rsl_composition").setValue(res.getComposition());
+		super.data.getField("rsl_currency").setValue(res.getCurrency());
+		super.data.getField("rsl_price").setValue(res.getPrice());
 		super.data.getField("rsl_date").setValue(res.getLastDate());
 		this.strRawData = res.getRawData();
 		this.strImageData = res.getImageData();
@@ -68,6 +80,56 @@ public class EResourceLog extends AbstractStorable {
 		return super.data.getField("rsl_notes").getStringValue();
 	}
 
+	public String getSeason() {
+		return super.data.getField("rsl_season").getStringValue();
+	}
+
+	/*
+	public void setSeason(String s){
+		super.data.getField("res_season").setValue(s);
+	}
+	*/
+
+	public String getSector() {
+		return super.data.getField("rsl_sector").getStringValue();
+	}
+	
+	/*
+	public void setSector(String s){
+		super.data.getField("res_sector").setValue(s);
+	}
+	*/
+
+	public String getComposition() {
+		return super.data.getField("rsl_composition").getStringValue();
+	}
+	
+	/*
+	public void setComposition(String c){
+		super.data.getField("res_composition").setValue(c);
+	}
+	*/
+
+	public String getCurrency() {
+		return super.data.getField("rsl_currency").getStringValue();
+	}
+	
+	/*
+	public void setCurrency(String c){
+		super.data.getField("res_currency").setValue(c);
+	}
+	*/
+
+	public String getPrice() {
+		return super.data.getField("rsl_price").getStringValue();
+	}
+	
+	/*
+	public void setPrice(String p){
+		super.data.getField("res_price").setValue(p);
+	}
+	*/
+	
 	public Date getTimestamp() {
 		return super.data.getField("rsl_date").getDateValue();
 	}

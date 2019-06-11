@@ -21,6 +21,11 @@ public class VResources extends AbstractVistaStore {
 		addColumn(EResource.VERSION, "res_lastver");
 		addColumn(EResource.USER, "res_user");
 		addColumn(EResource.NOTES, "res_notes");
+		addColumn(EResource.SEASON, "res_season");
+		addColumn(EResource.SECTOR, "res_sector");
+		addColumn(EResource.COMPOSITION, "res_composition");
+		addColumn(EResource.CURRENCY, "res_currency");
+		addColumn(EResource.PRICE, "res_price");
 		addColumn(EResource.LASTUPDATE, "res_lastUpdate");
 		addColumn(EResource.EXT, "res_ext");
 		this.project = prj;
