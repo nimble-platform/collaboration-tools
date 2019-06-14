@@ -195,6 +195,11 @@ public class Connector {
 					result.setUser(r.getUser());
 					result.setVersion(r.getVersion());
 					result.setNotes(r.getNotes());
+					result.setSeason(r.getSeason());
+					result.setSector(r.getSector());
+					result.setComposition(r.getComposition());
+					result.setCurrency(r.getCurrency());
+					result.setPrice(r.getPrice());
 					result.setLastUpdate(r.getLastDate());
 					result.setResource(r.getRawData());
 					result.setImageData(r.getImageData());
@@ -208,6 +213,11 @@ public class Connector {
 						result.setUser(el.getUser());
 						result.setVersion(el.getVersion());
 						result.setNotes(el.getNotes());
+						result.setSeason(el.getSeason());
+						result.setSector(el.getSector());
+						result.setComposition(el.getComposition());
+						result.setCurrency(el.getCurrency());
+						result.setPrice(el.getPrice());
 						result.setLastUpdate(el.getTimestamp());
 						result.setResource(el.getRawData());
 						result.setImageData(el.getImageData());

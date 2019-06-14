@@ -30,6 +30,13 @@ public class ResourceType extends JsonType {
    	private Long version;
    	private String resource;
    	private String image;
+   	
+   	private String season;
+   	private String sector;
+   	private String composition;
+   	private String currency;
+   	private String price;
+    
    	private String notes;
    	private Date lastUpdate; 
    	
@@ -110,10 +117,54 @@ public class ResourceType extends JsonType {
     	this.image = res;
     }
 
+    public String getSeason(){
+    	return this.season;
+    }
+
+    public void setSeason(String s){
+    	this.season = s;
+    }
+
+    public String getSector(){
+    	return this.sector;
+    }
+
+    public void setSector(String s){
+    	this.sector = s;
+    }
+
+    public String getComposition(){
+    	return this.composition;
+    }
+
+    public void setComposition(String comp){
+    	this.composition = comp;
+    }
+
+    public String getCurrency(){
+    	return this.currency;
+    }
+
+    public void setCurrency(String cur){
+    	this.currency = cur;
+    }
+    
+    public String getPrice(){
+    	return this.price;
+    }
+
+    public void setPrice(String p){
+    	this.price = p;
+    }
+
     public String getNotes(){
     	return this.notes;
     }
 
+    public void setNotes(String notes){
+    	this.notes = notes;
+    }
+    
     public void setLastUpdate(Date dt){
     	this.lastUpdate = dt;
     }
@@ -122,10 +173,6 @@ public class ResourceType extends JsonType {
     	return this.lastUpdate;
     }
 
-    public void setNotes(String notes){
-    	this.notes = notes;
-    }
-    
     @JsonIgnore
     public InputStream getStream(){
     	return new ByteArrayInputStream(this.resource.getBytes());
