@@ -35,7 +35,7 @@ public static string baseURL = "http://localhost:8081/collaboration-service";
 ## Deployment
 
 ### Local 
-Include the dll in the dependencies of a project. 
+Include the dll in the dependencies of a project.
 
 
 ----
