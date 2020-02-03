@@ -3,6 +3,7 @@ Collaboration-Service tool for the Nimble Platform.
 
 ## Development
 The Collaboration-Service, server side, is developed in Java and run under Tomcat.
+The iotClientProducer is the connection beetween fabric producer and internal datachannel in order to monitor a production for an order.
 
 ### Develpement with Eclipse
 For development purpose, install a copy of Eclipse (Oxigen Version was used). 
