@@ -1,0 +1,175 @@
+{
+	"info": {
+		"_postman_id": "bd1142a6-1a37-4c3b-99c4-58ae78cf4713",
+		"name": "Textile Iot InternalDataChannel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1 loginIBMTextile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\":{{USER_LOGIN}},\"password\":{{USER_PWD}}}"
+				},
+				"url": {
+					"raw": "{{HOST_NIMBLE}}/identity/login",
+					"host": [
+						"{{HOST_NIMBLE}}"
+					],
+					"path": [
+						"identity",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2a sendInternalIotData",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{HOST_NIMBLE}}/internaldatachannel/producer/sendIotData?idDataChannel=388383-2923982-292929-9223&idSensor=25&datakey=SN15478383483&iotData={\"production\": {\"productGroup\":\"fabric\", \"workSerialNumber\":\"SN15478383483\",\"timestamp\":\"2020-04-20T07:31:20+00:00\", \"totalMeters\":\"23848\", \"processDuration\":{\"unitOfMeasure\":\"Hours\",\"value\":\"0,3\"}}}",
+					"host": [
+						"{{HOST_NIMBLE}}"
+					],
+					"path": [
+						"internaldatachannel",
+						"producer",
+						"sendIotData"
+					],
+					"query": [
+						{
+							"key": "idDataChannel",
+							"value": "388383-2923982-292929-9223"
+						},
+						{
+							"key": "idSensor",
+							"value": "25"
+						},
+						{
+							"key": "datakey",
+							"value": "SN15478383483"
+						},
+						{
+							"key": "iotData",
+							"value": "{\"production\": {\"productGroup\":\"fabric\", \"workSerialNumber\":\"SN15478383483\",\"timestamp\":\"2020-04-20T07:31:20+00:00\", \"totalMeters\":\"23848\", \"processDuration\":{\"unitOfMeasure\":\"Hours\",\"value\":\"0,3\"}}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2b sendInternalIotDataBulk",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"idDataChannel\": \"388383-2923982-292929-9223\",\r\n  \"idSensor\": \"25\",\r\n  \"bulkIotData\": [\r\n    {\r\n      \"datakey\": \"SN1547896314567-0\",\r\n      \"iotData\": \"{\\\"production\\\": {\\\"productGroup\\\":\\\"DishWasher\\\",\\\"productType\\\":\\\"Whirlpool WFO 3T123 PF\\\",\\\"serialNumber\\\":\\\"SN1547896314567-0\\\",\\\"description\\\":\\\"lavastoviglie Whirlpool: color inox. Classe energetica A  , per consumi ridotti di energia elettrica. Un utile timer digitale che segnala la fine del ciclo di lavaggio. Tecnologia innovativa che garantisce un funzionamento super silezioso, per un elettrodomestico senza rumori. Eccellente capacità di pulizia per risultati di lavaggio ideali.\\\",\\\"processDuration\\\":{\\\"unitOfMeasure\\\":\\\"Hours\\\",\\\"value\\\":\\\"0,3\\\"}}}\"\r\n    },\r\n    {\r\n      \"datakey\": \"SN1547896314567-1\",\r\n      \"iotData\": \"{\\\"production\\\": {\\\"productGroup\\\":\\\"DishWasher\\\",\\\"productType\\\":\\\"Whirlpool WFO 3T123 PF\\\",\\\"serialNumber\\\":\\\"SN1547896314567-1\\\",\\\"description\\\":\\\"lavastoviglie Whirlpool: color inox. Classe energetica A  , per consumi ridotti di energia elettrica. Un utile timer digitale che segnala la fine del ciclo di lavaggio. Tecnologia innovativa che garantisce un funzionamento super silezioso, per un elettrodomestico senza rumori. Eccellente capacità di pulizia per risultati di lavaggio ideali.\\\",\\\"processDuration\\\":{\\\"unitOfMeasure\\\":\\\"Hours\\\",\\\"value\\\":\\\"0,3\\\"}}}\"\r\n    },\r\n    {\r\n      \"datakey\": \"SN1547896314567-2\",\r\n      \"iotData\": \"{\\\"production\\\": {\\\"productGroup\\\":\\\"DishWasher\\\",\\\"productType\\\":\\\"Whirlpool WFO 3T123 PF\\\",\\\"serialNumber\\\":\\\"SN1547896314567-2\\\",\\\"description\\\":\\\"lavastoviglie Whirlpool: color inox. Classe energetica A  , per consumi ridotti di energia elettrica. Un utile timer digitale che segnala la fine del ciclo di lavaggio. Tecnologia innovativa che garantisce un funzionamento super silezioso, per un elettrodomestico senza rumori. Eccellente capacità di pulizia per risultati di lavaggio ideali.\\\",\\\"processDuration\\\":{\\\"unitOfMeasure\\\":\\\"Hours\\\",\\\"value\\\":\\\"0,3\\\"}}}\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "{{HOST_NIMBLE}}/internaldatachannel/producer/sendBulkIotData",
+					"host": [
+						"{{HOST_NIMBLE}}"
+					],
+					"path": [
+						"internaldatachannel",
+						"producer",
+						"sendBulkIotData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3 getNextInternalMessages (check)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{HOST_NIMBLE}}/internaldatachannel/consumer/getNextMessages?idDataChannel=388383-2923982-292929-9223&idSensor=25&maxwaitms=500",
+					"host": [
+						"{{HOST_NIMBLE}}"
+					],
+					"path": [
+						"internaldatachannel",
+						"consumer",
+						"getNextMessages"
+					],
+					"query": [
+						{
+							"key": "idDataChannel",
+							"value": "388383-2923982-292929-9223"
+						},
+						{
+							"key": "idSensor",
+							"value": "25"
+						},
+						{
+							"key": "maxwaitms",
+							"value": "500"
+						},
+						{
+							"key": "maxbytes",
+							"value": "1000",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

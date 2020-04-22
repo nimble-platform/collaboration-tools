@@ -1,0 +1,45 @@
+Step in Textile IOT Scenaio
+===========================
+
++ step 1 - login in textile scenario over IBM and obtain token Authorization
+
+http://nimblewg.holonix.biz:18889/swagger-ui.html#/
+
+
++ step 2a - producer one step
+https://github.com/nimble-platform/data_pipes/blob/datachannel_integration/src/main/java/eu/nimble/service/datapipes/rest/datachannel/DataPipesDatachannelProducerApi.java
+
+single data
+
+{"production": {"productGroup":"fabric", "workSerialNumber":"SN15478383483","timestamp":"2020-04-20T07:31:20+00:00", "totalMeters":"23848", "processDuration":{"unitOfMeasure":"Hours","value":"0,3"}}}
+
+
++ step 2b - producer bulk data
+https://github.com/nimble-platform/data_pipes/blob/datachannel_integration/src/main/java/eu/nimble/service/datapipes/rest/datachannel/DataPipesDatachannelProducerApi.java
+
+https://github.com/nimble-platform/data_pipes/blob/datachannel_integration/src/main/java/eu/nimble/service/datapipes/rest/datachannel/BulkIotDataRequest.java
+
+
+bulk data
+
+{
+  "idDataChannel": "388383-2923982-292929-9223",
+  "idSensor": "25",
+  "bulkIotData": [
+{"production": {"productGroup":"fabric", "workSerialNumber":"SN15478383483","timestamp":"2020-04-20T07:31:25+00:00", "totalMeters":"23892", "processDuration":{"unitOfMeasure":"Hours","value":"0,24"}}}
+,
+{"production": {"productGroup":"fabric", "workSerialNumber":"SN15478383483","timestamp":"2020-04-20T07:31:28+00:00", "totalMeters":"23959", "processDuration":{"unitOfMeasure":"Hours","value":"0,32"}}}
+,
+{"production": {"productGroup":"fabric", "workSerialNumber":"SN15478383483","timestamp":"2020-04-20T07:31:42+00:00", "totalMeters":"23998", "processDuration":{"unitOfMeasure":"Hours","value":"0,22"}}}
+  ]
+}
+
+
++ step 3 - check read messages
+getNextMessages (49)
+https://github.com/nimble-platform/data_pipes/blob/datachannel_integration/src/main/java/eu/nimble/service/datapipes/rest/datachannel/RestConsumer.java
+
++ step 4 - filter IotData by ProductAvatar for last quantity of worked fabric.
+
+filterMessages
+https://github.com/nimble-platform/data_pipes/blob/datachannel_integration/src/main/java/eu/nimble/service/datapipes/rest/datachannel/RestConsumer.java
