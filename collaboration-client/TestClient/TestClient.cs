@@ -25,7 +25,7 @@ class TestClient
 			
 		String projectName = null;
 			
-		String idToken = CollaborationTool.login("ggariddi@dobi.it", "genius73");
+		String idToken = CollaborationTool.login("", "");
 		if (idToken!=null) {
 				
 			//Open projects list
@@ -75,7 +75,7 @@ class TestClient
 			
 			String projectName = null;
 			
-			String idToken = CollaborationTool.login("ggariddi@dobi.it", "genius73");
+			String idToken = CollaborationTool.login("", "");
 			if (idToken!=null) {
 				
 				//Open projects list
@@ -129,7 +129,7 @@ class TestClient
         try{
             String projectName = null;
 			
-			String idToken = CollaborationTool.login("ggariddi@dobi.it", "genius73");
+			String idToken = CollaborationTool.login("", "");
 			if (idToken!=null) {
 				
 				//Open projects list
@@ -181,7 +181,7 @@ class TestClient
             String projectName = null;
             String inviteID = null;
 
-            String idToken = CollaborationTool.login("ggariddi@dobi.it", "genius73");
+            String idToken = CollaborationTool.login("", "");
             if (idToken != null)
             {
 
@@ -223,7 +223,7 @@ class TestClient
 
             }
 
-            String idTokenCustomer = CollaborationTool.login("ssalvetti@dobi.it", "sNimble80");
+            String idTokenCustomer = CollaborationTool.login("", "");
             if (idTokenCustomer!=null) {
 				
                 Boolean find = false;
